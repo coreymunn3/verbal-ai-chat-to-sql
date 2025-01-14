@@ -11,19 +11,27 @@ import Markdown from "react-markdown";
 import { useChat } from "ai/react";
 
 export default function Home() {
-  const [input, setInput] = useState("");
+  // const [input, setInput] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [blockingAiResponse, setBlockingAiResponse] = useState<string | null>(
+    null
+  );
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit: handleStreamingSubmit,
+  } = useChat();
 
-  const handleSubmit = async (e: FormEvent) => {
-    console.log("getting AI response");
-    e.preventDefault();
-    setInput("");
-    setLoading(true);
-    const aiResponse = await getAiTextResponse(input);
-    setAiResponse(aiResponse);
-    setLoading(false);
-  };
+  // const handleBlockingSubmit = async (e: FormEvent) => {
+  //   console.log("getting AI response");
+  //   e.preventDefault();
+  //   setInput("");
+  //   setLoading(true);
+  //   const blockingAiResponse = await getAiTextResponse(input);
+  //   setBlockingAiResponse(blockingAiResponse);
+  //   setLoading(false);
+  // };
 
   return (
     <div className="dark:bg-slate-900 dark:text-white h-screen">
@@ -37,24 +45,48 @@ export default function Home() {
           </div>
 
           <div>
-            <form className="flex space-x-2" onSubmit={handleSubmit}>
-              <Input value={input} onChange={(e) => setInput(e.target.value)} />
+            <form className="flex space-x-2" onSubmit={handleStreamingSubmit}>
+              <Input value={input} onChange={handleInputChange} />
               <Button type="submit">Send</Button>
             </form>
           </div>
 
           <Separator className="my-4" />
 
-          <div className="min-h-20  bg-slate-100 dark:bg-slate-800 rounded-md flex items-center justify-center">
+          {/* for blocking submit */}
+          <div className=" bg-slate-100 dark:bg-slate-800 rounded-md flex items-center justify-center">
             {/* the area where the ai response will be loaded */}
             {loading && (
               <Loader2Icon className="animate-spin h-8 w-8 text-slate-800" />
             )}
-            {!loading && aiResponse && (
+
+            {!loading && blockingAiResponse && (
               <div className="p-8">
-                <Markdown>{aiResponse}</Markdown>
+                <Markdown>{blockingAiResponse}</Markdown>
               </div>
             )}
+          </div>
+
+          <div className="flex flex-col space-y-4 ">
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className="bg-slate-300 rounded-lg p-4 flex items-center space-x-2"
+              >
+                {m.role === "user" ? (
+                  <div className="h-10 min-w-10 w-10 rounded-full bg-black text-white flex items-center justify-center">
+                    You
+                  </div>
+                ) : (
+                  <div className="h-10 min-w-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                    AI
+                  </div>
+                )}
+                <div>
+                  <Markdown>{m.content}</Markdown>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
