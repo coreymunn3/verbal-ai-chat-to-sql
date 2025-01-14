@@ -71,10 +71,10 @@ export default function Home() {
             {messages.map((m) => (
               <div
                 key={m.id}
-                className="bg-slate-300 rounded-lg p-4 flex items-center space-x-2"
+                className="bg-slate-100 dark:bg-slate-700 rounded-lg p-4 flex items-center space-x-2"
               >
                 {m.role === "user" ? (
-                  <div className="h-10 min-w-10 w-10 rounded-full bg-black text-white flex items-center justify-center">
+                  <div className="h-10 min-w-10 w-10 rounded-full bg-slate-500 text-white flex items-center justify-center">
                     You
                   </div>
                 ) : (
