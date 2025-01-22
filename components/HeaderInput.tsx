@@ -21,7 +21,11 @@ export const HeaderInput = ({
 
       <div>
         <form className="flex space-x-2" onSubmit={handleSubmit}>
-          <Input value={input} onChange={handleInputChange} />
+          <Input
+            value={input}
+            onChange={handleInputChange}
+            className="dark:border-slate-600"
+          />
           <Button type="submit">Send</Button>
         </form>
       </div>
