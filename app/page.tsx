@@ -1,92 +1,84 @@
 "use client";
 
-import { getAiTextResponse } from "@/actions/actions";
-import DarkModeToggle from "@/components/DarkModeToggle";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Loader2Icon } from "lucide-react";
 import { FormEvent, useState } from "react";
-import Markdown from "react-markdown";
-import { useChat } from "ai/react";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import { HeaderInput } from "@/components/HeaderInput";
+import { generateQuery } from "@/actions/actions";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  // const [input, setInput] = useState("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [blockingAiResponse, setBlockingAiResponse] = useState<string | null>(
-    null
-  );
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit: handleStreamingSubmit,
-  } = useChat();
+  const [inputValue, setInputValue] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  // const [results, setResults] = useState<Result[]>([]);
+  const [columns, setColumns] = useState<string[]>([]);
+  const [activeQuery, setActiveQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState(1);
+  // const [chartConfig, setChartConfig] = useState<Config | null>(null);
 
-  // const handleBlockingSubmit = async (e: FormEvent) => {
-  //   console.log("getting AI response");
-  //   e.preventDefault();
-  //   setInput("");
-  //   setLoading(true);
-  //   const blockingAiResponse = await getAiTextResponse(input);
-  //   setBlockingAiResponse(blockingAiResponse);
-  //   setLoading(false);
-  // };
+  console.log(activeQuery);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const question = inputValue;
+    if (inputValue.length === 0) return;
+    clearExistingData();
+    if (question.trim()) {
+      setSubmitted(true);
+    }
+    setLoading(true);
+    setLoadingStep(1);
+    // generate the query
+    try {
+      console.log("here");
+      const query = await generateQuery(question);
+
+      if (query === undefined) {
+        toast.error("An error occurred. Please try again.");
+        setLoading(false);
+        return;
+      }
+      // for now...
+      setActiveQuery(query);
+      setLoading(false);
+    } catch (error) {}
+  };
+
+  const clearExistingData = () => {
+    setActiveQuery("");
+    // setResults([]);
+    setColumns([]);
+    // setChartConfig(null);
+  };
+
+  const handleClear = () => {
+    setSubmitted(false);
+    setInputValue("");
+    clearExistingData();
+  };
 
   return (
-    <div className="dark:bg-slate-900 dark:text-white h-screen">
-      <div className="max-w-4xl mx-auto">
+    <div className="dark:bg-slate-900 dark:text-white min-h-screen">
+      <div className="max-w-6xl mx-auto">
         <div className="p-8 mt-10">
-          <div className="flex justify-between align-middle mb-10">
-            <div className="font-bold text-3xl">
-              Natural Language to PostgreSQL
-            </div>
-            <DarkModeToggle />
-          </div>
-
-          <div>
-            <form className="flex space-x-2" onSubmit={handleStreamingSubmit}>
-              <Input value={input} onChange={handleInputChange} />
-              <Button type="submit">Send</Button>
-            </form>
-          </div>
-
-          <Separator className="my-4" />
-
-          {/* for blocking submit */}
-          <div className=" bg-slate-100 dark:bg-slate-800 rounded-md flex items-center justify-center">
-            {/* the area where the ai response will be loaded */}
-            {loading && (
-              <Loader2Icon className="animate-spin h-8 w-8 text-slate-800" />
-            )}
-
-            {!loading && blockingAiResponse && (
-              <div className="p-8">
-                <Markdown>{blockingAiResponse}</Markdown>
-              </div>
-            )}
-          </div>
+          <HeaderInput
+            handleSubmit={handleSubmit}
+            input={inputValue}
+            handleInputChange={(e) => setInputValue(e.target.value)}
+          />
+          <Separator className="my-4 dark:bg-slate-600" />
 
           <div className="flex flex-col space-y-4 ">
-            {messages.map((m) => (
-              <div
-                key={m.id}
-                className="bg-slate-100 dark:bg-slate-700 rounded-lg p-4 flex items-center space-x-2"
-              >
-                {m.role === "user" ? (
-                  <div className="h-10 min-w-10 w-10 rounded-full bg-slate-500 text-white flex items-center justify-center">
-                    You
-                  </div>
-                ) : (
-                  <div className="h-10 min-w-10 w-10 rounded-full bg-blue-500 text-white flex items-center justify-center">
-                    AI
-                  </div>
-                )}
-                <div>
-                  <Markdown>{m.content}</Markdown>
-                </div>
+            {/* query viewer */}
+            {!!activeQuery && (
+              <div className="dark:bg-slate-800 bg-slate-100 p-4 rounded-md">
+                <p className="mb-2">Your Query:</p>
+                <div className="font-mono text-sm">{activeQuery}</div>
+                {/* TO DO - query explanation */}
+                {/* <Button className="w-full mt-4 ">Explain This Query</Button> */}
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
