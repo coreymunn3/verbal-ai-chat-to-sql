@@ -14,12 +14,14 @@ datasource db {
 }
 
 model Company {
-  id         Int      @id @default(autoincrement())
-  name       String
-  valuation  Float // Store in billions (e.g., 350.00 for $350B)
-  dateJoined DateTime
-  country    String
-  city       String?
-  industry   String
-  investors  String // Investors stored as a comma-separated string
+  id          Int      @id @default(autoincrement())
+  name        String
+  valuation   Float // Store in billions (e.g., 350.00 for $350B)
+  date_joined DateTime
+  country     String
+  city        String?
+  industry    String
+  investors   String // Investors stored as a comma-separated string
+
+  @@map("company") // Ensures Prisma uses "company" as the table name in the database
 }
