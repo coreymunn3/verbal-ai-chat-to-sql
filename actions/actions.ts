@@ -3,6 +3,19 @@ import { generateText, generateObject } from "ai";
 import openai from "@/lib/open-ai";
 import { z } from "zod";
 import { sqlSystemPrompt } from "@/prompts/prompts";
+import { prisma } from "@/lib/prisma";
+import { Company } from "@prisma/client";
+import superjson from "superjson";
+import { Decimal } from "decimal.js";
+
+superjson.registerCustom<Decimal, string>(
+  {
+    isApplicable: (v): v is Decimal => Decimal.isDecimal(v),
+    serialize: (v) => v.toJSON(),
+    deserialize: (v) => new Decimal(v),
+  },
+  "decimal.js"
+);
 
 /********************************************************************** */
 
@@ -28,4 +41,32 @@ export const generateQuery = async (userInput: string) => {
   } catch (error) {
     throw new Error("Failed to generate SQL query");
   }
+};
+
+export const runGeneratedSqlQuery = async (query: string) => {
+  // make sure its only a select query
+  if (
+    !query.trim().toLowerCase().startsWith("select") ||
+    query.trim().toLowerCase().includes("drop") ||
+    query.trim().toLowerCase().includes("delete") ||
+    query.trim().toLowerCase().includes("insert") ||
+    query.trim().toLowerCase().includes("update") ||
+    query.trim().toLowerCase().includes("alter") ||
+    query.trim().toLowerCase().includes("truncate") ||
+    query.trim().toLowerCase().includes("create") ||
+    query.trim().toLowerCase().includes("grant") ||
+    query.trim().toLowerCase().includes("revoke")
+  ) {
+    throw new Error("Only SELECT queries are allowed");
+  }
+
+  let data: any;
+  try {
+    data = await prisma.$queryRawUnsafe<Company[]>(query);
+  } catch (error) {
+    console.error(error);
+    throw new Error("Unable to run SQL query");
+  }
+  // serialize it to encode 'decimal' type
+  return superjson.serialize(data);
 };

@@ -4,20 +4,30 @@ import { FormEvent, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { HeaderInput } from "@/components/HeaderInput";
-import { generateQuery } from "@/actions/actions";
+import { generateQuery, runGeneratedSqlQuery } from "@/actions/actions";
 import { Button } from "@/components/ui/button";
+import { Decimal } from "decimal.js";
+import SuperJSON, { SuperJSONResult } from "superjson";
+import superjson from "superjson";
+import { Result } from "@/lib/types";
+
+superjson.registerCustom<Decimal, string>(
+  {
+    isApplicable: (v): v is Decimal => Decimal.isDecimal(v),
+    serialize: (v) => v.toJSON(),
+    deserialize: (v) => new Decimal(v),
+  },
+  "decimal.js"
+);
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  // const [results, setResults] = useState<Result[]>([]);
+  const [results, setResults] = useState<Result[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
   const [activeQuery, setActiveQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(1);
-  // const [chartConfig, setChartConfig] = useState<Config | null>(null);
-
-  console.log(activeQuery);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -31,7 +41,6 @@ export default function Home() {
     setLoadingStep(1);
     // generate the query
     try {
-      console.log("here");
       const query = await generateQuery(question);
 
       if (query === undefined) {
@@ -39,8 +48,18 @@ export default function Home() {
         setLoading(false);
         return;
       }
-      // for now...
+      // show the query
       setActiveQuery(query);
+      setLoadingStep(2);
+      // generate the actual result from the query
+      const queryResult = await runGeneratedSqlQuery(query);
+      const deserializedResult: Result[] = superjson.deserialize(queryResult);
+
+      // parse it
+      setResults(deserializedResult);
+      setColumns(Object.keys(deserializedResult[0]));
+
+      // end
       setLoading(false);
     } catch (error) {}
   };
