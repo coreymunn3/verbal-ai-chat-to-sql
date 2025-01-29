@@ -2,7 +2,10 @@
 import { generateText, generateObject } from "ai";
 import openai from "@/lib/open-ai";
 import { z } from "zod";
-import { sqlSystemPrompt } from "@/prompts/prompts";
+import {
+  explainSqlSystemPrompt,
+  generateSqlSystemPrompt,
+} from "@/prompts/prompts";
 import { prisma } from "@/lib/prisma";
 import { Company } from "@prisma/client";
 import superjson from "superjson";
@@ -31,7 +34,7 @@ export const generateQuery = async (userInput: string) => {
   try {
     const result = await generateObject({
       model: openai("gpt-4o"),
-      system: sqlSystemPrompt,
+      system: generateSqlSystemPrompt,
       prompt: `Generate the postgres sql query to retrieve the data the user wants: ${userInput}`,
       schema: z.object({
         query: z.string(),
@@ -69,4 +72,29 @@ export const runGeneratedSqlQuery = async (query: string) => {
   }
   // serialize it to encode 'decimal' type
   return superjson.serialize(data);
+};
+
+export const explainSqlQuery = async (input: string, sqlQuery: string) => {
+  try {
+    const result = await generateObject({
+      model: openai("gpt-4o"),
+      system: explainSqlSystemPrompt,
+      prompt: `Explain the SQL query you generated to retrieve the data the user wanted. Assume the user is not an expert in SQL. Break down the query into steps. Be concise
+      User Query:
+      ${input}
+
+      Generated Query:
+      ${sqlQuery}
+      `,
+      schema: z.object({
+        section: z.string(),
+        explanation: z.string(),
+      }),
+      output: "array",
+    });
+    return result.object;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to explain the query");
+  }
 };
