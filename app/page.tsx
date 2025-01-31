@@ -13,7 +13,9 @@ import { Decimal } from "decimal.js";
 
 import superjson from "superjson";
 import { Result } from "@/lib/types";
-import QueryExplanation from "@/components/QueryViewer";
+import QueryViewer from "@/components/QueryViewer";
+import { Loader2Icon } from "lucide-react";
+import ResultsViewer from "@/components/ResultsViewer";
 
 superjson.registerCustom<Decimal, string>(
   {
@@ -86,7 +88,7 @@ export default function Home() {
   return (
     <div className="dark:bg-slate-900 dark:text-white min-h-screen">
       <div className="max-w-6xl mx-auto">
-        <div className="p-8 mt-10">
+        <div className="flex flex-col gap-4 p-8 mt-10 min-h-screen">
           <HeaderInput
             handleSubmit={handleSubmit}
             input={inputValue}
@@ -94,12 +96,32 @@ export default function Home() {
           />
           <Separator className="my-4 dark:bg-slate-600" />
 
-          {activeQuery && (
-            <QueryExplanation
-              activeQuery={activeQuery}
-              inputValue={inputValue}
-            />
+          {activeQuery.length > 0 && (
+            <QueryViewer activeQuery={activeQuery} inputValue={inputValue} />
           )}
+
+          <div className="w-full">
+            {loading ? (
+              <div className="w-full h-96 flex flex-col items-center justify-center space-y-4">
+                <Loader2Icon className="h-12 w-12 animate-spin text-muted-foreground" />
+                <p className="text-foreground/70">
+                  {loadingStep === 1
+                    ? "Generating SQL Query..."
+                    : "Querying the Database..."}
+                </p>
+              </div>
+            ) : results.length === 0 ? (
+              <div className="flex items-center justify-center">
+                <p className="text-center text-muted-foreground">
+                  No Results Found
+                </p>
+              </div>
+            ) : (
+              <div className="">
+                <ResultsViewer results={results} columns={columns} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

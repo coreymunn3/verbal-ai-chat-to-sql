@@ -11,15 +11,12 @@ import {
 import { Explanation } from "@/lib/types";
 import { explainSqlQuery } from "@/actions/actions";
 
-interface QueryExplanationProps {
+interface QueryViewerProps {
   activeQuery: string;
   inputValue: string;
 }
 
-const QueryExplanation = ({
-  activeQuery,
-  inputValue,
-}: QueryExplanationProps) => {
+const QueryViewer = ({ activeQuery, inputValue }: QueryViewerProps) => {
   const [queryExplanations, setQueryExplanations] = useState<Explanation[]>([]);
   const [explanationsLoading, setExplanationsLoading] = useState(false);
 
@@ -91,4 +88,4 @@ const QueryExplanation = ({
     </div>
   );
 };
-export default QueryExplanation;
+export default QueryViewer;
