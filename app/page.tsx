@@ -10,17 +10,10 @@ import {
   runGeneratedSqlQuery,
 } from "@/actions/actions";
 import { Decimal } from "decimal.js";
-import { CircleHelp, Loader2Icon } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import superjson from "superjson";
-import { Explanation, Result } from "@/lib/types";
-import { Button } from "@/components/ui/button";
+import { Result } from "@/lib/types";
+import QueryExplanation from "@/components/QueryViewer";
 
 superjson.registerCustom<Decimal, string>(
   {
@@ -39,11 +32,8 @@ export default function Home() {
   const [activeQuery, setActiveQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(1);
-  const [queryExplanations, setQueryExplanations] = useState<Explanation[]>([]);
-  const [explanationsLoading, setExplanationsLoading] = useState(false);
 
-  // console.log(columns, results);
-  console.log(queryExplanations);
+  console.log("cols and results", columns, results);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -80,13 +70,6 @@ export default function Home() {
     } catch (error) {}
   };
 
-  const handleExplainQuery = async () => {
-    setExplanationsLoading(true);
-    const explanations = await explainSqlQuery(inputValue, activeQuery);
-    setQueryExplanations(explanations);
-    setExplanationsLoading(false);
-  };
-
   const clearExistingData = () => {
     setActiveQuery("");
     setResults([]);
@@ -111,64 +94,12 @@ export default function Home() {
           />
           <Separator className="my-4 dark:bg-slate-600" />
 
-          <div className="flex flex-col dark:bg-slate-800 bg-slate-100 p-4 rounded-md">
-            {/* the query area */}
-            <div className="flex mb-6">
-              {/* The Generated Query */}
-              <div className="flex-1 space-y-4 ">
-                {!!activeQuery && (
-                  <div>
-                    <p className="mb-2 font-semibold">Your Query:</p>
-                    <div className="font-mono text-sm">{activeQuery}</div>
-                  </div>
-                )}
-              </div>
-              {/* Button to Explain the Query */}
-              <div className="flex items-center justify-center cursor-pointer">
-                {activeQuery && (
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Button
-                          variant={"ghost"}
-                          size={"icon"}
-                          onClick={handleExplainQuery}
-                          disabled={explanationsLoading}
-                        >
-                          <CircleHelp className="h-6 w-6" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Explain This Query</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )}
-              </div>
-            </div>
-            {/* the explanation of the query area */}
-            <div>
-              {explanationsLoading && (
-                <div className="flex space-x-4">
-                  <Loader2Icon className="animate-spin" />
-                  <span>Loading Explanation for This Query...</span>
-                </div>
-              )}
-              {!explanationsLoading && queryExplanations.length && (
-                <div>
-                  <p className="mb-2 font-semibold">Query Explanation:</p>
-                  {queryExplanations.map(({ explanation, section }) => (
-                    <div className="mb-2">
-                      <p className="font-mono text-sm italic">{section}</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">
-                        {explanation}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          {activeQuery && (
+            <QueryExplanation
+              activeQuery={activeQuery}
+              inputValue={inputValue}
+            />
+          )}
         </div>
       </div>
     </div>
