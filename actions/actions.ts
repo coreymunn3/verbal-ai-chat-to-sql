@@ -1,4 +1,5 @@
 "use server";
+
 import { generateText, generateObject } from "ai";
 import openai from "@/lib/open-ai";
 import { z } from "zod";
@@ -10,6 +11,7 @@ import { prisma } from "@/lib/prisma";
 import { Company } from "@prisma/client";
 import superjson from "superjson";
 import { Decimal } from "decimal.js";
+import { configSchema, Result } from "@/lib/types";
 
 superjson.registerCustom<Decimal, string>(
   {
@@ -96,5 +98,73 @@ export const explainSqlQuery = async (input: string, sqlQuery: string) => {
   } catch (error) {
     console.error(error);
     throw new Error("Failed to explain the query");
+  }
+};
+
+export const generateChartConfig = async (
+  results: Result[],
+  userQuery: string
+) => {
+  try {
+    const { object } = await generateObject({
+      model: openai("gpt-4o"),
+      system: "You are a data visualization expert.",
+      prompt: `Given the following data from a SQL query result, generate the chart config that best visualises the data and answers the users query.
+      For multiple groups use multi-lines. The configuration object must include the following fields:
+      - type: The type of chart (bar, line, or pie).
+      - xKey: The key for the x-axis or category.
+      - yKeys: An array of keys for the y-axis values.
+      - legend: A boolean indicating whether to show the legend.
+      - title: A string for the chart title.
+      - description: A string describing the chart.
+      - takeaway: A string summarizing the main takeaway from the chart.
+
+      If the chart type is "line", you must also include:
+      - multipleLines: A boolean indicating whether the chart compares groups of data.
+      - measurementColumn: The key for the quantitative y-axis column.
+      - lineCategories: An array of categories used to compare different lines or data series.
+
+      Here is an example object configuration for a line chart:
+      export const chartConfig = {
+        type: "line",
+        xKey: "year",
+        yKeys: ["company_count"],
+        multipleLines: false,
+        measurementColumn: "company_count",
+        lineCategories: [],
+        legend: true,
+        title: "Number of Companies in New York Over Time",
+        description: "This line chart shows the number of companies in New York each year.",
+        takeaway: "The number of companies in New York has generally increased over time, with a significant spike in 2021."
+      }
+
+      Here is an example pie chart config:
+      export const chartConfig = {
+        type: "pie",
+        xKey: "month",
+        yKeys: ["sales", "profit", "expenses"],
+        legend: true
+      }
+      
+      User Query: 
+      ${userQuery}
+
+      Data: 
+      ${JSON.stringify(results)}
+      `,
+      schema: configSchema,
+    });
+
+    const colors: Record<string, string> = {};
+    object.yKeys.forEach((key, index) => {
+      colors[key] = `hsl(var(--chart-${index + 1}))`;
+    });
+
+    return {
+      ...object,
+      colors,
+    };
+  } catch (error) {
+    console.error(error);
   }
 };
