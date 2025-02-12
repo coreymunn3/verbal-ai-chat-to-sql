@@ -6,13 +6,14 @@ import { toast } from "sonner";
 import { HeaderInput } from "@/components/HeaderInput";
 import {
   explainSqlQuery,
+  generateChartConfig,
   generateQuery,
   runGeneratedSqlQuery,
 } from "@/actions/actions";
 import { Decimal } from "decimal.js";
 
 import superjson from "superjson";
-import { Result } from "@/lib/types";
+import { Config, Result } from "@/lib/types";
 import QueryViewer from "@/components/QueryViewer";
 import { Loader2Icon } from "lucide-react";
 import ResultsViewer from "@/components/ResultsViewer";
@@ -34,11 +35,16 @@ export default function Home() {
   const [activeQuery, setActiveQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(1);
+  const [chartConfig, setChartConfig] = useState<Config | undefined>();
 
-  console.log("cols and results", columns, results);
+  console.log("cols and results", columns, superjson.stringify(results));
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    // clean up previous queries
+    handleClear();
+
+    // save the question and process it
     const question = inputValue;
     if (inputValue.length === 0) return;
     clearExistingData();
@@ -63,12 +69,21 @@ export default function Home() {
       const queryResult = await runGeneratedSqlQuery(query);
       const deserializedResult: Result[] = superjson.deserialize(queryResult);
 
-      // parse it
+      // parse it & set data attrs
       setResults(deserializedResult);
       setColumns(Object.keys(deserializedResult[0]));
-
-      // end
       setLoading(false);
+
+      // generate chart config & save
+      setLoadingStep(3);
+      const generatedChartConfig = await generateChartConfig(
+        deserializedResult,
+        question
+      );
+      setChartConfig(generatedChartConfig);
+
+      // clean up
+      setLoadingStep(1);
     } catch (error) {}
   };
 
@@ -107,7 +122,9 @@ export default function Home() {
                 <p className="text-foreground/70">
                   {loadingStep === 1
                     ? "Generating SQL Query..."
-                    : "Querying the Database..."}
+                    : loadingStep === 2
+                    ? "Querying the Database..."
+                    : "Generating Chart Config..."}
                 </p>
               </div>
             ) : results.length === 0 ? (
@@ -118,7 +135,13 @@ export default function Home() {
               </div>
             ) : (
               <div className="">
-                <ResultsViewer results={results} columns={columns} />
+                {results.length > 0 && columns.length > 0 && !!chartConfig && (
+                  <ResultsViewer
+                    results={results}
+                    columns={columns}
+                    chartConfig={chartConfig}
+                  />
+                )}
               </div>
             )}
           </div>

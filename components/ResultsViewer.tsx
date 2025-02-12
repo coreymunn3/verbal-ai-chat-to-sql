@@ -1,22 +1,27 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Result } from "@/lib/types";
+import { Config, Result } from "@/lib/types";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DynamicChart } from "./DynamicChart";
 
 interface ResultsViewerProps {
   results: Result[];
   columns: string[];
+  chartConfig: Config;
 }
 
-const ResultsViewer = ({ results, columns }: ResultsViewerProps) => {
+const ResultsViewer = ({
+  results,
+  columns,
+  chartConfig,
+}: ResultsViewerProps) => {
   const formatColumnTitle = (title: string) => {
     return title
       .split("_")
@@ -31,9 +36,7 @@ const ResultsViewer = ({ results, columns }: ResultsViewerProps) => {
       <Tabs defaultValue="table" className="w-full flex flex-col">
         <TabsList className="w-full grid grid-cols-2">
           <TabsTrigger value="table">Table</TabsTrigger>
-          <TabsTrigger value="chart" disabled={true}>
-            Chart
-          </TabsTrigger>
+          <TabsTrigger value="chart">Chart</TabsTrigger>
         </TabsList>
         <TabsContent value="table">
           <div className="relative overflow-hidden rounded-lg border">
@@ -64,7 +67,9 @@ const ResultsViewer = ({ results, columns }: ResultsViewerProps) => {
             </Table>
           </div>
         </TabsContent>
-        <TabsContent value="chart">Change your password here.</TabsContent>
+        <TabsContent value="chart">
+          <DynamicChart chartData={results} chartConfig={chartConfig} />
+        </TabsContent>
       </Tabs>
     </div>
   );
