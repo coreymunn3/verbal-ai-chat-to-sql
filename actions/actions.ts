@@ -150,7 +150,7 @@ export const generateChartConfig = async (
       ${userQuery}
 
       Data: 
-      ${JSON.stringify(results)}
+      ${superjson.stringify(results)}
       `,
       schema: configSchema,
     });
