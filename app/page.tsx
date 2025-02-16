@@ -5,7 +5,6 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { HeaderInput } from "@/components/HeaderInput";
 import {
-  explainSqlQuery,
   generateChartConfig,
   generateQuery,
   runGeneratedSqlQuery,
@@ -36,8 +35,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(1);
   const [chartConfig, setChartConfig] = useState<Config | undefined>();
-
-  console.log("cols and results", columns, superjson.stringify(results));
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

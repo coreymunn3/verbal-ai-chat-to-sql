@@ -1,0 +1,1418 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.2 (Debian 17.2-1.pgdg120+1)
+-- Dumped by pg_dump version 17.3 (Homebrew)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+ALTER SCHEMA public OWNER TO postgres;
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
+--
+
+COMMENT ON SCHEMA public IS '';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: _prisma_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public._prisma_migrations (
+    id character varying(36) NOT NULL,
+    checksum character varying(64) NOT NULL,
+    finished_at timestamp with time zone,
+    migration_name character varying(255) NOT NULL,
+    logs text,
+    rolled_back_at timestamp with time zone,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    applied_steps_count integer DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public._prisma_migrations OWNER TO postgres;
+
+--
+-- Name: company; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.company (
+    id integer NOT NULL,
+    name text NOT NULL,
+    valuation double precision NOT NULL,
+    date_joined timestamp(3) without time zone NOT NULL,
+    country text NOT NULL,
+    city text,
+    industry text NOT NULL,
+    investors text NOT NULL
+);
+
+
+ALTER TABLE public.company OWNER TO postgres;
+
+--
+-- Name: company_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.company_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.company_id_seq OWNER TO postgres;
+
+--
+-- Name: company_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.company_id_seq OWNED BY public.company.id;
+
+
+--
+-- Name: company id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.company ALTER COLUMN id SET DEFAULT nextval('public.company_id_seq'::regclass);
+
+
+--
+-- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
+51a1c9e1-0e2f-40e5-bf9b-f82c5946c94a	8ffb1151fc88f293cc7bf93f13a46043a0665737580aa0c809062c38ad947ddf	2025-01-22 15:37:38.22981+00	20250114142718_init	\N	\N	2025-01-22 15:37:38.224519+00	1
+f46780ae-1356-4089-a150-e23e98fb7f3f	6f01fd118c8e94324bd7393ad66133772209c6a6119147a362dd81711788234b	2025-01-22 15:37:38.236015+00	20250114143842_add_company_model	\N	\N	2025-01-22 15:37:38.230791+00	1
+ebdd45af-0c80-45fc-8b41-ef408d2c9668	6eec8645ef05e224a2494041982d586457087f4d7370967edc51461c12dde6aa	2025-01-22 15:37:38.597174+00	20250122153738_rename_company_table	\N	\N	2025-01-22 15:37:38.592303+00	1
+55a3094a-64f0-4b90-b0f7-3ef588c18e10	a20ce8040b76c31c51bdddb0c5540af24ac2a4c03469da21d40e43b2e8133925	2025-01-22 15:48:24.288688+00	20250122154703_rename_date_joined_to_date_joined	\N	\N	2025-01-22 15:48:24.285297+00	1
+\.
+
+
+--
+-- Data for Name: company; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.company (id, name, valuation, date_joined, country, city, industry, investors) FROM stdin;
+1	SpaceX	350	2012-12-01 05:00:00	United States	Hawthorne	Industrials	Founders Fund, Draper Fisher Jurvetson, Rothenberg Ventures
+2	ByteDance	300	2017-04-07 04:00:00	China	Beijing	Media & Entertainment	Sequoia Capital China, SIG Asia Investments, Sina Weibo, SoftBank Group
+3	OpenAI	157	2019-07-22 04:00:00	United States	San Francisco	Enterprise Tech	Khosla Ventures, Thrive Capital, Sequoia Capital
+4	Stripe	70	2014-01-23 05:00:00	United States	San Francisco	Financial Services	Khosla Ventures, LowercaseCapital, capitalG
+5	SHEIN	66	2018-07-03 04:00:00	Singapore	\N	Consumer & Retail	Tiger Global Management, Sequoia Capital China, Shunwei Capital Partners
+6	Databricks	62	2019-02-05 05:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, New Enterprise Associates, Battery Ventures
+7	xAI	50	2024-05-26 04:00:00	United States	Burlingame	Enterprise Tech	Sequoia Capital, Andreessen Horowitz, VY Capital
+8	Revolut	45	2018-04-26 04:00:00	United Kingdom	London	Financial Services	Index Ventures, DST Global, Ribbit Capital
+9	Canva	32	2018-01-08 05:00:00	Australia	Surry Hills	Enterprise Tech	Sequoia Capital China, Blackbird Ventures, Matrix Partners
+10	Fanatics	31	2012-06-06 04:00:00	United States	Jacksonville	Consumer & Retail	SoftBank Group, Andreessen Horowitz, Temasek Holdings
+11	Epic Games	22.5	2018-10-26 04:00:00	United States	Cary	Media & Entertainment	Tencent Holdings, KKR, Smash Ventures
+12	Chime	25	2019-03-05 05:00:00	United States	San Francisco	Financial Services	Forerunner Ventures, Crosslink Capital, Homebrew
+13	CoreWeave	23	2023-04-20 04:00:00	United States	Roseland	Enterprise Tech	Magnetar Capital
+14	Miro	17.5	2022-01-05 05:00:00	United States	San Francisco	Enterprise Tech	Accel, AltaIR Capital, Technology Crossover Ventures
+15	Xiaohongshu	17	2016-03-31 04:00:00	China	Shanghai	Media & Entertainment	GGV Capital, ZhenFund, Tencent
+16	Anthropic	16.05	2023-02-03 05:00:00	United States	San Francisco	Enterprise Tech	Google
+17	Yuanfudao	15.5	2017-05-31 04:00:00	China	Beijing	Consumer & Retail	Tencent Holdings, Warbug Pincus, IDG Capital
+18	DJI Innovations	15	2015-01-23 05:00:00	China	Shenzhen	Industrials	Accel Partners, Sequoia Capital
+19	Discord	15	2018-04-20 04:00:00	United States	San Francisco	Media & Entertainment	Benchmark, Greylock Partners, Tencent Holdings
+20	Gopuff	15	2020-10-08 04:00:00	United States	Philadelphia	Consumer & Retail	Accel, SoftBank Group, Anthos Capital
+21	Yuanqi Senlin	15	2020-03-01 05:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, Longfor Capitalm, Gaorong Capital
+22	Ripple	15	2019-12-20 05:00:00	United States	San Francisco	Financial Services	IDG Capital, Venture51, Lightspeed Venture Partners
+23	Klarna	14.5	2011-12-12 05:00:00	Sweden	Stockholm	Financial Services	Institutional Venture Partners, Sequoia Capital, General Atlantic
+24	Anduril	14	2019-09-11 04:00:00	United States	Irvine	Industrials	Andreessen Horowitz, Founders Fund, Revolution Ventures
+25	Scale	13.8	2019-08-05 04:00:00	United States	San Francisco	Enterprise Tech	Accel, Y Combinator, Index Ventures
+26	Plaid	13.5	2018-12-11 05:00:00	United States	San Francisco	Financial Services	New Enterprise Associates, Spar Capital, Index Ventures
+27	Rippling	13.5	2020-08-04 04:00:00	United States	San Francisco	Enterprise Tech	Initialized Capital, Y Combinator, Kleiner Perkins Caufield & Byers
+28	OpenSea	13.3	2021-07-20 04:00:00	United States	New York	Media & Entertainment	Andreessen Horowitz, Thirty Five Ventures, Sound Ventures
+29	Celonis	13	2018-06-26 04:00:00	Germany	Munich	Enterprise Tech	Accel, 83North
+30	Grammarly	13	2019-10-10 04:00:00	United States	San Francisco	Media & Entertainment	General Catalyst, Institutional Venture Partners, Breyer Capital
+31	Devoted Health	12.9	2018-10-16 04:00:00	United States	Waltham	Healthcare & Life Sciences	Andreessen Horowitz, F-Prime Capital, Venrock
+32	Faire	12.59	2019-10-30 04:00:00	United States	San Francisco	Consumer & Retail	Khosla Ventures, Forerunner Ventures, Sequoia Capital
+33	Brex	12.3	2018-10-05 04:00:00	United States	San Francisco	Enterprise Tech	DST Global, Ribbit Capital, Greenoaks Capital Management
+34	JUUL Labs	12	2017-12-20 05:00:00	United States	San Francisco	Consumer & Retail	Tiger Global Management
+35	Wiz	12	2021-03-17 04:00:00	Israel	Tel Aviv	Enterprise Tech	Insight Partners, Sequoia Capital, Index Ventures
+36	Bitmain Technologies	12	2018-07-06 04:00:00	China	Beijing	Enterprise Tech	Coatue Management, Sequoia Capital China, IDG Capital
+37	GoodLeap	12	2021-10-13 04:00:00	United States	Roseville	Financial Services	New Enterprise Associates, BDT Capital Partners, Davidson Kempner Capital Management
+38	Xingsheng Selected	12	2020-07-22 04:00:00	China	Changsha	Consumer & Retail	KKR, Tencent Holdings, Sequoia Capital China
+39	Deel	12	2021-04-21 04:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Spark Capital, Y Combinator
+40	Airtable	11.7	2018-11-15 05:00:00	United States	San Francisco	Enterprise Tech	Caffeinated Capital, CRV, Founder Collective
+41	BYJU's	11.5	2017-07-25 04:00:00	India	Bengaluru	Consumer & Retail	Tencent Holdings, Lightspeed India Partners, Sequoia Capital India
+42	ZongMu Technology	11.4	2021-06-03 04:00:00	China	Shanghai	Industrials	LTW Capital, Legend Capital, Qualcomm Ventures
+43	Global Switch	11.1	2016-12-22 05:00:00	United Kingdom	London	Enterprise Tech	Aviation Industry Corporation of China, Essence Financial, Jiangsu Sha Steel Group
+44	Checkout.com	11	2019-05-02 04:00:00	United Kingdom	London	Financial Services	Tiger Global Management, Insight Partners, DST Global
+45	Bolt	11	2021-10-08 04:00:00	United States	San Francisco	Financial Services	Activant Capital, Tribe Capital, General Atlantic
+46	Alchemy	10.2	2021-10-28 04:00:00	United States	San Francisco	Enterprise Tech	DFJ Growth Fund, Coatue Management, Addition
+47	Huolala	10	2019-02-21 05:00:00	China	Guangzhou	Industrials	MindWorks Ventures, Shunwei Capital Partners, Xiang He Capital
+48	Gusto	10	2015-12-18 05:00:00	United States	San Francisco	Financial Services	General Catalyst Partners, Google Ventures, Kleiner Perkins Caufield & Byers
+49	Chehaoduo	10	2016-03-12 05:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, GX Capital
+50	Talkdesk	10	2018-10-03 04:00:00	United States	San Francisco	Enterprise Tech	DJF, Salesforce Ventures, Storm Ventures
+51	Notion	10	2020-04-01 04:00:00	United States	San Francisco	Enterprise Tech	Index Ventures, Draft Ventures, Felicis Ventures
+52	Digital Currency Group	10	2021-11-01 04:00:00	United States	New York	Financial Services	Ribbit Capital, capitalG, Softbank Group
+53	KuCoin	10	2022-05-10 04:00:00	Seychelles	Victoria	Financial Services	IDG Capital, Matrix Partners China, Jump Crypto
+54	ServiceTitan	9.5	2018-11-14 05:00:00	United States	Glendale	Industrials	Bessemer Venture Partners, ICONIQ Capital, Battery Ventures
+55	HEYTEA	9.28	2019-07-01 04:00:00	China	Shenzhen	Consumer & Retail	Sequoia Capital China, Tencent Investment, BA Capital
+56	N26	9.23	2019-01-10 05:00:00	Germany	Berlin	Financial Services	Redalpine Venture Partners, Earlybird Venture Capital, Valar Ventures
+57	Navan	9.2	2018-11-08 05:00:00	United States	Palo Alto	Enterprise Tech	Andreessen Horowitz, Lightspeed Venture Partners, Zeev Ventures
+58	VAST Data	9.1	2020-04-16 04:00:00	United States	New York	Enterprise Tech	Norwest Venture Partners, Goldman Sachs, Dell Technologies Capital
+59	Northvolt	9.08	2019-06-12 04:00:00	Sweden	Stockholm	Industrials	Vattenfall, Volkswagen Group, Goldman Sachs
+60	Perplexity	9	2024-04-23 04:00:00	United States	San Francisco	Enterprise Tech	New Enterprise Associates, Institutional Venture Partners, NVentures
+61	Tanium	9	2015-03-31 04:00:00	United States	Kirkland	Enterprise Tech	Andreessen Horowitz, Nor-Cal Invest, TPG Growth
+62	Niantic	9	2017-11-24 05:00:00	United States	San Francisco	Media & Entertainment	Nintendo, Google, Pokemon Company International, Spark Capital
+63	OYO Rooms	9	2018-09-25 04:00:00	India	Gurugram	Consumer & Retail	SoftBank Group, Sequoia Capital India, Lightspeed India Partners
+64	Rapyd	8.75	2019-12-03 05:00:00	United Kingdom	London	Financial Services	Target Global, General Catalyst, Durable Capital Partners
+65	Kavak	8.7	2020-10-01 04:00:00	Mexico	Lerma de Villada	Industrials	DST Global, SoftBank Group, Mountain Nazca
+66	Nuro	8.6	2019-02-11 05:00:00	United States	Mountain View	Industrials	SoftBank Group, Greylock Partners, Gaorong Capital
+67	Chainalysis	8.6	2020-11-23 05:00:00	United States	New York	Financial Services	Addition, Benhcmark, Accel
+68	Personio	8.5	2021-01-19 05:00:00	Germany	Munich	Enterprise Tech	Global Founders Capital, Nortzone Ventures, Picus Capital
+69	SumUp	8.5	2019-07-16 04:00:00	United Kingdom	London	Financial Services	American Express Ventures, Goldman Sachs, Bain Capital Credit
+70	Bolt	8.4	2018-05-29 04:00:00	Estonia	Tallinn	Industrials	Didi Chuxing, Diamler, TMT Investments
+71	Tipalti	8.3	2020-10-06 04:00:00	United States	San Mateo	Enterprise Tech	01 Advisors, Zeev Ventures, Group 11
+72	Dream11	8	2019-04-09 04:00:00	India	Mumbai	Media & Entertainment	Kaalari Capital, Tencent Holdings, Steadview Capital
+73	Fireblocks	8	2021-07-27 04:00:00	United States	New York	Financial Services	Tenaya Capital, Coatue Management, Stripes Group
+74	Flexport	8	2018-04-30 04:00:00	United States	San Francisco	Industrials	Bloomberg Beta, Founders Fund, First Round Capital
+75	FalconX	8	2021-08-10 04:00:00	United States	San Mateo	Financial Services	Tiger Global Management, American Express Ventures, B Capital Group
+76	Caris	7.83	2021-05-12 04:00:00	United States	Irving	Healthcare & Life Sciences	Sixth Street Partners, OrbiMed Advisors, Highland Capital Management
+77	Ramp	7.65	2021-03-29 04:00:00	United States	New York	Enterprise Tech	D1 Capital Partners, Stripe, Coatue Management
+78	Dapper Labs	7.6	2021-03-30 04:00:00	Canada	Vancouver	Media & Entertainment	Union Square Ventures, Venrock, Andreessen Horowitz
+79	Netskope	7.5	2018-11-13 05:00:00	United States	Santa Clara	Enterprise Tech	Lightspeed Venture Partners, Social Capital, Accel
+80	Razorpay	7.5	2020-10-11 04:00:00	India	Bengaluru	Financial Services	Sequoia Capital India, Tiger Global Management, Matrix Partners India
+81	Automattic	7.5	2013-05-27 04:00:00	United States	San Francisco	Media & Entertainment	Insight Venture Partners, Lowercase Capital, Polaris Partners
+82	Carta	7.4	2019-05-06 04:00:00	United States	San Francisco	Financial Services	Menlo Ventures, Spark Capital, Union Square Ventures
+83	Snyk	7.4	2020-01-21 05:00:00	United States	Boston	Enterprise Tech	BOLDstart Ventures, Google Ventures, Accel
+84	Gong	7.25	2020-08-12 04:00:00	United States	Palo Alto	Enterprise Tech	Norwest Venture Partners, Next World Capital, Wing Venture Capital
+85	Gemini	7.1	2021-11-19 05:00:00	United States	New York	Financial Services	Morgan Creek Digital, Marcy Venture Partners, 10T Fund
+86	Blockchain.com	7	2021-02-17 05:00:00	United Kingdom	London	Financial Services	Lightspeed Venture Partners, Google Ventures, Lakestar
+87	Toss	7	2018-12-09 05:00:00	South Korea	Seoul	Financial Services	Bessemer Venture Partners, Qualcomm Ventures, Kleiner Perkins Caufield & Byers
+88	We Doctor	7	2015-09-22 04:00:00	China	Hangzhou	Healthcare & Life Sciences	Tencent, Morningside Group
+89	Ro	7	2020-07-27 04:00:00	United States	New York	Healthcare & Life Sciences	Initialized Capital, General Catalyst, SignalFire
+90	ConsenSys	7	2021-11-17 05:00:00	United States	New York	Enterprise Tech	Third Point, Electric Capital, Coinbase Ventures
+91	Automation Anywhere	6.8	2018-07-02 04:00:00	United States	San Jose	Enterprise Tech	General Atlantic, Goldman Sachs, New Enterprise Associates
+92	1Password	6.8	2021-07-08 04:00:00	Canada	Toronto	Enterprise Tech	Slack Fund, Accel, Skip Capital
+93	Ziroom	6.6	2018-01-17 05:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, Warburg Pincus, General Catalyst
+94	SVOLT	6.51	2020-06-08 04:00:00	China	Changzhou	Industrials	IDG Capital, Bank Of China Group Investment,, SDIC CMC Investment Management
+95	National Stock Exchange of India	6.5	2020-07-01 04:00:00	India	Mumbai	Financial Services	TA Associates, SoftBank Group, GS Growth
+96	Mollie	6.5	2020-09-08 04:00:00	Netherlands	Amsterdam	Financial Services	Technology Crossover Ventures
+97	Doctolib	6.4	2019-03-19 04:00:00	France	Paris	Healthcare & Life Sciences	BPI France, Kerala Ventures, Accel
+98	CRED	6.4	2021-04-06 04:00:00	India	Bengaluru	Financial Services	Tiger Global Management, DST Global, Sequoia Capital India
+99	DataRobot	6.3	2019-07-29 04:00:00	United States	Boston	Enterprise Tech	New Enterprise Associates, Accomplice, IA Ventures
+100	Upgrade	6.28	2018-02-12 05:00:00	United States	San Francisco	Financial Services	Union Square Ventures, Ribbit Capital, VY Capital
+101	Mistral AI	6.22	2023-12-10 05:00:00	France	Paris	Enterprise Tech	Lightspeed Venture Partners, General Catalyst, Andreessen Horowitz
+102	Hinge Health	6.2	2021-01-06 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Atomico, Insight Partners, Coatue Management
+103	Black Unicorn Factory	6.1	2021-05-20 04:00:00	United States	Los Angeles	Enterprise Tech	Barter Ventures
+104	Benchling	6.1	2021-04-14 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Thrive Capital, Benchmark, MenloVentures
+105	Grafana Labs	6	2021-03-25 04:00:00	United States	New York	Enterprise Tech	Lightspeed Venture Partners, Lead Edge Capital, Coatue Management
+106	Applied Intuition	6	2020-10-22 04:00:00	United States	Sunnyvale	Industrials	Andreessen Horowitz, Lux Capital, General Catalyst
+107	Commure	6	2021-09-16 04:00:00	United States	San Francisco	Healthcare & Life Sciences	General Catalyst, HCA Healthcare
+108	Royole Corporation	6	2015-08-18 04:00:00	China	Shenzhen	Industrials	Warmsun Holding, IDG Capital Partners
+109	iCapital Network	6	2021-07-27 04:00:00	United States	New York	Financial Services	BlackRock, Blackstone, UBS
+110	6Sense	5.2	2021-03-30 04:00:00	United States	San Francisco	Enterprise Tech	Venrock, Battery Ventures, Insight Partners
+111	Attentive	5.99	2020-09-23 04:00:00	United States	Hoboken	Enterprise Tech	NextView Ventures, Eniac Ventures, Sequoia Capital
+112	Easyhome	5.78	2018-02-12 05:00:00	China	Beijing	Consumer & Retail	Alibaba Group, Boyu Capital, Borui Capital
+113	Lianjia	5.77	2016-04-07 04:00:00	China	Beijing	Financial Services	Tencent, Baidu, Huasheng Capital
+114	Workato	5.7	2021-01-12 05:00:00	United States	Mountain View	Enterprise Tech	Battery Ventures, Storm Ventures, Redpoint Ventures
+115	Vuori	5.5	2021-10-13 04:00:00	United States	Carlsbad	Consumer & Retail	SoftBank Group, Norwest Venture Partners
+116	Back Market	5.7	2021-05-18 04:00:00	France	Paris	Consumer & Retail	Aglae Ventures, Eurazeo, Daphni
+117	RELEX	5.7	2022-02-17 05:00:00	Finland	Helsinki	Consumer & Retail	Blackstone, Technology Crossover Ventures, Summit Partners
+118	The Boring Company	5.7	2022-04-20 04:00:00	United States	Pflugerville	Industrials	VY Capital, 8VC, Craft Ventures
+119	Postman	5.6	2020-06-11 04:00:00	United States	San Francisco	Enterprise Tech	Nexus Venture Partners, CRV, Insight Partners
+120	FiveTran	5.6	2020-06-30 04:00:00	United States	Oakland	Enterprise Tech	Matrix Partners, Andreessen Horowitz, General Catalyst
+121	ContentSquare	5.6	2021-05-25 04:00:00	France	Paris	Enterprise Tech	Highland Europe, Eurazeo, Canaan Partners
+122	Helsing	5.37	2023-09-14 04:00:00	Germany	Munchen	Enterprise Tech	
+123	Trade Republic	5.36	2021-05-20 04:00:00	Germany	Berlin	Financial Services	Founders Fund. Accel, Creandum
+124	Odoo	5.3	2021-07-29 04:00:00	Belgium	Louvain-la-Neuve	Enterprise Tech	Summit Partners, Noshaq, Sofinnova Partners
+125	Rappi	5.25	2018-08-31 04:00:00	Colombia	Bogota	Consumer & Retail	DST Global, Andreessen Horowitz, Sequoia Capital, Redpoint e.ventures
+126	Collibra	5.25	2019-01-29 05:00:00	Belgium	Brussels	Enterprise Tech	Index Ventures, Battery Ventures, ICONIQ Capital
+127	Sierra	4.5	2024-10-28 04:00:00	United States	San Francisco	Enterprise Tech	Benchmark, Sequoia Capital, Thrive Capital
+128	OneTrust	4.5	2019-07-11 04:00:00	United States	Atlanta	Enterprise Tech	Insight Partners
+129	QuintoAndar	5.1	2019-09-09 04:00:00	Brazil	Campinas	Financial Services	Kaszek Ventures, General Atlantic, SoftBank Group
+130	Monzo	5.9	2018-10-31 04:00:00	United Kingdom	London	Financial Services	Passion Capital, Thrive Capital, Orange Digital Ventures
+131	C6 Bank	5.05	2020-12-02 05:00:00	Brazil	Sao Paulo	Financial Services	Credit Suisse
+132	Safe Superintelligence	5	2024-09-04 04:00:00	United States	San Francisco	Enterprise Tech	Sequoia Capital, DST Global, Andreessen Horowitz
+133	Redwood Materials	5	2021-07-28 04:00:00	United States	Carson City	Industrials	Breakthrough Energy Ventures, Capricorn Investment Group, Valor Equity Partners
+134	Abnormal Security	5.1	2022-05-10 04:00:00	United States	San Francisco	Enterprise Tech	Greylock Partners, Insight Partners,Menlo Ventures
+135	Hello TransTech	5	2018-06-01 04:00:00	China	Shanghai	Industrials	Ant Financial Services Group, GGV Capital
+136	Airwallex	5.5	2019-03-25 04:00:00	Australia	Melbourne	Financial Services	DST Global, Sequoia Capital China, Tencent Holdings
+137	Mambu	5.5	2021-01-06 05:00:00	Netherlands	Amsterdam	Financial Services	Runa Capital, Acton Capital Partners, Point Nine Capital
+138	Oura	5	2022-04-05 04:00:00	Finland	Oulu	Healthcare & Life Sciences	Forerunner Ventures, Lifeline Ventures, MSD Capital
+139	Howden Group Holdings	5	2020-09-29 04:00:00	United Kingdom	London	Insurance	General Atlantic, 3i Group, Huagai Capital
+140	SambaNova Systems	5	2021-04-13 04:00:00	United States	Palo Alto	Enterprise Tech	Walden International, Google Ventures, Intel Capital
+141	ZEPZ	5	2021-08-23 04:00:00	United Kingdom	London	Financial Services	Accel, Technology Crossover Ventures, LeapFrog Investments
+142	OakNorth Bank	5	2017-10-12 04:00:00	United Kingdom	London	Financial Services	Clermont Group, Coltrane Asset Management, Toscafund Asset Management
+143	Moon Active	5	2020-01-26 05:00:00	Israel	Tel Aviv	Media & Entertainment	Insight Partners, Andalusian Capital Partners
+144	OfBusiness	5	2021-07-31 04:00:00	India	Gurgaon	Industrials	Matrix Partners India, Falcon Edge Capital, SoftBank Group
+145	Cockroach Labs	5	2021-01-12 05:00:00	United States	New York	Enterprise Tech	Google Ventures, Benchmark, FirstMark Capital
+146	Pine Labs	5	2020-01-24 05:00:00	India	Noida	Financial Services	Sequoia Capital India, Temasek, PayPal Ventures
+147	Qonto	5	2022-01-11 05:00:00	France	Paris	Enterprise Tech	Alven Capital, Valar Ventures, Tencent Holdings
+148	Icertis	5	2019-07-17 04:00:00	United States	Bellevue	Enterprise Tech	Eight Roads Ventures, Greycroft, Ignition Partners
+149	Hopper	5	2021-03-24 04:00:00	Canada	Montreal	Consumer & Retail	Capital One Growth Ventures, Citi Ventures, OMERS Ventures
+150	VerSe Innovation	5	2020-12-22 05:00:00	India	Bengaluru	Media & Entertainment	Falcon Edge Capital, Omidyar Network, Sequoia Capital India
+151	Lenskart	5	2019-12-20 05:00:00	India	Faridabad	Consumer & Retail	Chiratae Ventures, PremjiInvest, Softbank
+152	ShareChat	5	2021-04-08 04:00:00	India	Bengaluru	Media & Entertainment	India Quotient, Elevation Capital, Lightspeed Venture Partners
+153	Coalition	5	2021-03-17 04:00:00	United States	San Francisco	Insurance	Two Sigma Ventures, Flint Capital, Commerce Ventures
+154	Zepto	5	2023-08-25 04:00:00	India	Mumbai	Consumer & Retail	Nexus Venture Partners, Contrary, Global Founders Capital
+155	Meesho	3.5	2021-04-05 04:00:00	India	Bengaluru	Consumer & Retail	Venture Highway, Sequoia Capital India, Prosus Ventures
+156	Cerebral	4.8	2021-06-10 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Oak HC/FT Partners, Artis Ventures, WestCap Group
+157	Reify Health	4.8	2021-08-10 04:00:00	United States	Boston	Healthcare & Life Sciences	Sierra Ventures, Battery Ventures, Asset Management Ventures
+158	Chipone	4.73	2021-12-16 05:00:00	China	Beijing	Industrials	China Grand Prosperity Investment, Silk Road Huacheng, Oriza Equity Investment
+159	BetterUp	4.7	2021-02-25 05:00:00	United States	San Francisco	Enterprise Tech	Threshold Ventures, Lightspeed Venture Partners, Crosslink Capital
+160	Pleo	4.7	2021-07-06 04:00:00	Denmark	Copenhagen	Enterprise Tech	Creandum, Founders, Kinnevik
+161	SonarSource	4.7	2022-04-26 04:00:00	Switzerland	Geneva	Enterprise Tech	Advent International,General Catalyst,Insight Partners
+162	Lyra Health	5.85	2020-08-25 04:00:00	United States	Burlingame	Healthcare & Life Sciences	Greylock Partners, Venrock, Providence Ventures
+163	SandboxAQ	5.6	2024-12-18 05:00:00	United States	Palo Alto	Enterprise Tech	Breyer Capital, Parkway VC, TIME Ventures
+164	Checkr	4.6	2019-09-19 04:00:00	United States	San Francisco	Enterprise Tech	Y Combinator, Accel, T. Rowe Price
+165	Glean	4.6	2022-05-18 04:00:00	United States	Palo Alto	Enterprise Tech	General Catalyst, Kleiner Perkins Caufield & Byers, Lightspeed Venture Partners
+166	Skims	4	2021-04-09 04:00:00	United States	Los Angeles	Consumer & Retail	Thrive Capital, Alliance Consumer Growth, Imaginary Ventures
+167	Color	4.6	2021-01-04 05:00:00	United States	Burlingame	Healthcare & Life Sciences	General Catalyst, Viking Global Investors, T. Rowe Price
+168	Lendable	4.58	2021-03-31 04:00:00	United Kingdom	London	Financial Services	Ontario Teachers' Pension Plan, Goldman Sachs
+169	Vinted	5.4	2019-11-27 05:00:00	Lithuania	Vilnius	Consumer & Retail	Accel, Insight Partners, Burda Principal Investments
+170	VIPKid	4.5	2016-08-04 04:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, Tencent Holdings, Sinovation Ventures
+171	Socure	4.5	2021-03-16 04:00:00	United States	New York	Financial Services	Two Sigma Ventures, Flint Capital, Commerce Ventures
+172	wefox	4.5	2019-03-05 05:00:00	Germany	Berlin	Insurance	Salesforce Ventures, Seedcamp, OMERS Ventures
+173	Hugging Face	4.5	2022-05-09 04:00:00	United States	New York	Enterprise Tech	Betaworks Ventures, Addition, Lux Capital
+174	Outreach	4.4	2019-04-16 04:00:00	United States	Seattle	Enterprise Tech	Mayfield Fund, M12, Trinity Ventures
+175	Lightmatter	4.4	2023-12-19 05:00:00	United States	Mountain View	Enterprise Tech	Google Ventures, Spark Capital, Matrix Partners
+176	Alan	4.46	2021-04-19 04:00:00	France	Paris	Healthcare & Life Sciences	Index Ventures, Temasek, Portag3 Ventures
+177	Guild Education	4.4	2019-11-13 05:00:00	United States	Denver	Enterprise Tech	General Atlantic, Blackstone, ICONIQ Growth
+178	Arctic Wolf Networks	4.3	2020-10-22 04:00:00	United States	Eden Prairie	Enterprise Tech	Lightspeed Venture Partners, Redpoint Ventures, Viking Global Investors
+179	OutSystems	4.3	2018-06-05 04:00:00	United States	Boston	Enterprise Tech	KKR, ES Ventures, North Bridge Growth Equity
+180	Sorare	4.3	2021-09-21 04:00:00	France	Paris	Media & Entertainment	Benchmark, Accel, SoftBank Group
+181	Zipline	4.2	2019-05-20 04:00:00	United States	South San Francisco	Industrials	Sequoia Capital, Baillie Gifford & Co., Google Ventures
+182	Relativity Space	4.2	2020-11-23 05:00:00	United States	Inglewood	Industrials	Playground Global, Bond, Tribe Capital
+183	Miaoshou Doctor	4.25	2019-06-27 04:00:00	China	Beijing	Healthcare & Life Sciences	Sequoia Capital China, Qiming Venture Partners, Tencent Holdings
+184	ThoughtSpot	4.2	2018-05-08 04:00:00	United States	Sunnyvale	Enterprise Tech	Lightspeed Venture Partners, Khosla Ventures, Geodesic Capital
+185	Globalization Partners	4.2	2022-01-24 05:00:00	United States	Boston	Enterprise Tech	Vista Equity Partners, Wincove, TDR Capital
+186	dbt Labs	4.2	2021-06-30 04:00:00	United States	Philadelphia	Enterprise Tech	Andreessen Horowitz, Amplify Partners, Sequoia Capital
+187	SSENSE	4.15	2021-06-08 04:00:00	Canada	Montreal	Consumer & Retail	Sequoia Capital
+188	Dataminr	4.1	2018-06-04 04:00:00	United States	New York	Enterprise Tech	Venrock, Institutional Venture Partners, Goldman Sachs
+189	BitPanda	4.11	2021-03-16 04:00:00	Austria	Vienna	Financial Services	Speedinvest, Valar Ventures, Uniqa Ventures
+190	Weee!	4.1	2021-03-16 04:00:00	United States	Fremont	Consumer & Retail	Goodwater Capital, iFly, XVC Venture Capital
+191	AlphaSense	4	2022-06-15 04:00:00	United States	New York	Enterprise Tech	Viking Global Investors, GS Growth, BlackRock
+192	Skydance Media	4	2020-02-11 05:00:00	United States	Santa Monica	Media & Entertainment	RedBird Capital Partners, CJ ENM, Tencent Holdings
+193	The Brandtech Group	4	2019-11-19 05:00:00	United States	New York	Enterprise Tech	Undisclosed
+194	Houzz	4	2014-09-30 04:00:00	United States	Palo Alto	Consumer & Retail	New Enterprise Associates, Sequoia Capital, Comcast Ventures
+195	Yello Mobile	4	2014-11-11 05:00:00	South Korea	Seoul	Consumer & Retail	Formation 8
+196	Inflection AI	4	2022-05-13 04:00:00	United States	Palo Alto	Enterprise Tech	Gates Frontier, Greylock Partners, Horizons Ventures
+197	MEGVII	4	2017-10-31 04:00:00	China	Beijing	Enterprise Tech	Ant Financial Services Group, Russia-China Investment Fund, Foxconn Technology Company
+198	Greensill	4	2018-07-16 04:00:00	United Kingdom	London	Financial Services	SoftBank Group, General Atlantic
+199	Impossible Foods	4	2019-05-13 04:00:00	United States	Redwood City	Consumer & Retail	Khosla Ventures, Horizons Ventures, Temasek Holdings
+200	Radiology Partners	4	2018-02-26 05:00:00	United States	El Segundo	Healthcare & Life Sciences	New Enterprise Associates, Starr Investment Holdings
+201	Next Insurance	4	2019-10-07 04:00:00	United States	Palo Alto	Insurance	Zeev Ventures, Ribbit Capital, TLV Partners
+202	PointClickCare	4	2021-01-07 05:00:00	Canada	Mississauga	Healthcare & Life Sciences	Dragoneer Investment Group, Hellman & Friedman, JMI Equity
+203	Zapier	4	2021-01-14 05:00:00	United States	Sunnyvale	Enterprise Tech	Sequoia Capital, Bessemer Venture Partners, Threshold Ventures
+204	Clubhouse	4	2021-01-24 05:00:00	United States	San Francisco	Media & Entertainment	Andreessen Horowitz, TQ Ventures
+205	BrowserStack	4	2021-06-16 04:00:00	Ireland	Dublin	Enterprise Tech	Accel, Insight Partners, Bond Capital
+206	ClickUp	4	2020-12-15 05:00:00	United States	San Diego	Enterprise Tech	Georgian Partners, Craft Ventures
+207	Cerebras Systems	4	2018-11-14 05:00:00	United States	Los Altos	Enterprise Tech	Benchmark, Foundation Capital, Sequoia Capital
+208	Farmers Business Network	4	2020-08-03 04:00:00	United States	San Carlos	Industrials	Blackrock, Kleiner Perkins Caulfield & Byers, Google Ventures
+209	Branch	4	2018-09-10 04:00:00	United States	Redwood City	Enterprise Tech	New Enterprise Associates, Pear, Cowboy Ventures
+210	Aurora Solar	4	2021-05-24 04:00:00	United States	San Francisco	Industrials	Fifth Wall Ventures, Energize Ventures, ICONIQ Capital
+211	Webflow	4	2021-01-13 05:00:00	United States	San Francisco	Enterprise Tech	Accel, Silversmith Capital Partners, capitalG
+212	Yuga Labs	4	2022-03-22 04:00:00	United States	Miami	Media & Entertainment	Andreessen Horowitz, Thrive Capital, Sound Ventures
+213	Medlinker	3.92	2018-07-31 04:00:00	China	Chengdu	Healthcare & Life Sciences	China Health Industry Investment Fund, China Renaissance, and Sequoia Capital China
+214	StockX	3.8	2019-06-26 04:00:00	United States	Detroit	Consumer & Retail	Google Ventures, Battery Ventures, DST Global
+215	MessageBird	3.8	2020-10-08 04:00:00	Netherlands	Amsterdam	Enterprise Tech	Y Combinator, Atomico, Accel
+216	Articulate	3.75	2021-07-01 04:00:00	United States	New York	Enterprise Tech	Blackstone, ICONIQ Growth, General Atlantic
+217	Dutchie	3.75	2021-03-16 04:00:00	United States	Bend	Consumer & Retail	Casa Verde Capital, Gron Ventures, Thrity Five Ventures
+218	Cohesity	3.7	2018-06-11 04:00:00	United States	San Jose	Enterprise Tech	SoftBank Group, Sequoia Capital, Wing Venture Capital
+219	Abba Platforms	3.7	2024-10-10 04:00:00	United States	New York	Financial Services	Run4 Capital
+220	Dataiku	3.7	2019-12-04 05:00:00	United States	New York	Enterprise Tech	Alven Capital, FirstMark Capital, capitalG
+221	GOAT	3.7	2020-09-23 04:00:00	United States	Culver City	Consumer & Retail	Upfront Ventures, Webb Investment Network, D1 Capital Partners
+222	Noom	3.7	2021-05-24 04:00:00	United States	New York	Healthcare & Life Sciences	Qualcomm Ventures, Samsung Ventures, Silver Lake
+223	Papaya Global	3.7	2021-03-04 05:00:00	United States	New York	Enterprise Tech	Bessemer Venture Partners, Insight Partners, New Era Ventures
+224	Abogen	3.7	2021-11-29 05:00:00	China	Suzhou	Healthcare & Life Sciences	Hillhouse Capital Management, SoftBank Group, Qiming Venture Partners
+225	Harness	3.7	2021-01-14 05:00:00	United States	San Francisco	Enterprise Tech	Menlo Ventures, Alkeon Capital Management, Citi Ventures
+226	Whatnot	3.7	2021-09-16 04:00:00	United States	Marina del Rey	Consumer & Retail	Y Combinator, Andreessen Horowitz, Wonder Ventures
+227	o9 Solutions	3.7	2020-04-28 04:00:00	United States	Dallas	Enterprise Tech	KKR
+228	Autograph	3.66	2022-01-20 05:00:00	United States	Santa Monica	Media & Entertainment	01 Advisors. Kleiner Perkins Caufield & Byers. Andreessen Horowitz
+229	Relativity	3.6	2021-03-18 04:00:00	United States	Chicago	Enterprise Tech	Silver Lake, ICONIQ Capital
+230	Whoop	3.6	2020-10-28 04:00:00	United States	Boston	Healthcare & Life Sciences	NextView Ventures, Promus Ventures, Two Sigma Ventures
+231	Course Hero	3.6	2020-02-12 05:00:00	United States	Redwood City	Consumer & Retail	NewView Capital, Maveron, Ridge Ventures
+232	SpotOn	3.6	2021-05-26 04:00:00	United States	San Francisco	Financial Services	Dragoneer Investment Group, DST Global, Franklin Templeton
+233	Otto Bock HealthCare	3.52	2017-06-24 04:00:00	Germany	Duderstadt	Healthcare & Life Sciences	EQT Partners
+234	Cribl	3.5	2021-08-25 04:00:00	United States	San Francisco	Enterprise Tech	Institutional Venture Partners, CRV, Sequoia Capital
+235	Vultr	3.5	2024-12-18 05:00:00	United States	San Francisco	West Palm Beach	AMD Ventures
+236	Indigo Ag	3.5	2017-09-26 04:00:00	United States	Boston	Industrials	Activant Capital Group, Alaska Permanent Fund, Baillie Gifford & Co.
+237	eToro	3.5	2023-03-21 04:00:00	United Kingdom	London	Financial Services	BRM Group, Spark Capital, Social Leverage
+238	HyalRoute	3.5	2020-05-26 04:00:00	Singapore	\N	Industrials	Kuang-Chi
+239	Rec Room	3.5	2021-03-23 04:00:00	United States	Seattle	Media & Entertainment	First Round Capital, Sequoia Capital, Index Ventures
+240	Mirakl	3.5	2020-09-22 04:00:00	France	Paris	Consumer & Retail	Elaia Partners, 83North, Felix Capital
+241	Tekion	4	2020-10-21 04:00:00	United States	San Ramon	Industrials	Airbus Ventures, Index Ventures, Advent International
+242	GoStudent	3.5	2021-06-22 04:00:00	Austria	Vienna	Consumer & Retail	DN Capital, Left Lane Capital, Coatue Management
+243	Highspot	3.5	2021-02-22 05:00:00	United States	Seattle	Enterprise Tech	Madrona Venture Group, Shasta Ventures, Salesforce Ventures
+244	Handshake	3.5	2021-05-12 04:00:00	United States	San Francisco	Enterprise Tech	Kleiner Perkins Caufield & Byers, Lightspeed Venture Partners, True Ventures
+245	ChargeBee Technologies	3.5	2021-04-20 04:00:00	United States	San Francisco	Financial Services	Insight Partners, Tiger Global Management, Accel
+246	Flock Safety	3.5	2021-07-13 04:00:00	United States	Atlanta	Consumer & Retail	Matrix Partners, Initialized Capital, Tiger Global Management
+247	Helion Energy	3.5	2021-11-05 04:00:00	United States	Redmond	Industrials	Mithril Capital Management, Y Combinator, Capricorn Investment Group
+248	Unacademy	3.44	2020-09-02 04:00:00	India	Bengaluru	Consumer & Retail	Blume Ventures, Nexus Venture Partners, Sequoia Capital India
+249	MoonPay	3.4	2021-11-22 05:00:00	United States	Miami	Financial Services	New Enterprise Associates, Coatue Management, Tiger Global Management
+250	Upstox	3.4	2021-11-29 05:00:00	India	Mumbai	Financial Services	Tiger Global Management, Kalaari Capital
+251	Improbable	3.36	2017-05-11 04:00:00	United Kingdom	London	Media & Entertainment	Andreessen Horowitz, SoftBank Group, Temasek Holdings
+252	Youxia Motors	3.35	2018-04-02 04:00:00	China	Shanghai	Industrials	China Environmental Protection Industry, China Fortune Ocean
+253	Starburst	3.35	2021-01-06 05:00:00	United States	Boston	Enterprise Tech	Index Ventures, Coatue Management, Andreessen Horowitz
+254	Moonshot AI	3.3	2024-02-19 05:00:00	China	Beijing	Consumer & Retail	HongShan, Jinfu Investment, ZhenFund
+255	Sila	3.3	2019-04-16 04:00:00	United States	Alameda	Industrials	Bessemer Venture Partners, Sutter Hill Ventures, Matrix Partners
+256	Komodo Health	3.3	2020-05-22 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Andreessen Horowitz, IA Ventures, Felicis Ventures
+257	Kurly	3.3	2021-07-09 04:00:00	South Korea	Seoul	Consumer & Retail	Sequoia Capital China, DST Global, DST Global
+258	Cars24	3.3	2020-11-24 05:00:00	India	Gurgaon	Industrials	Moore Strategic Ventures, DST Global, Sequoia Capital India
+259	Spring Health	3.3	2021-09-16 04:00:00	United States	New York	Healthcare & Life Sciences	Rethink Impact, Work-Bench, RRE Ventures
+260	BlockDaemon	3.25	2021-09-21 04:00:00	United States	Los Angeles	Financial Services	BOLDstart Ventures, Lerer Hippeau, Kenetic Capital
+261	Bilt Rewards	3.25	2022-10-25 04:00:00	United States	New York	Financial Services	Camber Creek, Kairos HQ, Fifth Wall Ventures
+262	Vercel	3.25	2021-06-23 04:00:00	United States	San Francisco	Enterprise Tech	CRV, Accel, Google Ventures
+263	Dadi Cinema	3.24	2016-05-11 04:00:00	China	Shenzhen	Media & Entertainment	Alibaba Pictures Group
+264	Aiven	3.21	2021-10-18 04:00:00	Finland	Helsinki	Enterprise Tech	Institutional Venture Partners, Atomico, Earlybird Venture Capital
+265	Thumbtack	3.2	2015-09-29 04:00:00	United States	San Francisco	Consumer & Retail	Tiger Global, Sequoia Capital, Google Capital
+266	Cedar	3.2	2021-03-09 05:00:00	United States	New York	Healthcare & Life Sciences	Thrive Capital, Founders Fund, Cocnord Health Partners
+267	Eruditus Executive Education	3.1	2021-08-12 04:00:00	India	Mumbai	Enterprise Tech	Sequoia Capital India, Softbank, Bertelsmann India Investments
+268	Blockstream	3.2	2021-08-24 04:00:00	Canada	Vancouver	Financial Services	AME Cloud Ventures, Future Perfect Ventures, Blockchain Capital
+269	Innovaccer	3.2	2021-02-19 05:00:00	United States	San Francisco	Healthcare & Life Sciences	M12, WestBridge Capital, Lightspeed Venture Partners
+270	Ironclad	3.2	2022-01-18 05:00:00	United States	Sacramento	Enterprise Tech	Accel, Sequoia Capital, Y Combinator
+271	Eikon Therapeutics	3.2	2022-01-06 05:00:00	United States	Hayward	Healthcare & Life Sciences	The Column Group, Foresite Capital, Foresite Capital
+272	Retool	3.2	2021-12-22 05:00:00	United States	San Francisco	Enterprise Tech	Sequoia Capital
+273	Verkada	3.2	2020-01-29 05:00:00	United States	San Mateo	Industrials	next47, First Round Capital, Sequoia Capital
+274	PsiQuantum	3.15	2021-07-27 04:00:00	United States	Palo Alto	Enterprise Tech	Playground Global, M12, BlackRock
+275	HighRadius	3.1	2020-01-07 05:00:00	United States	Houston	Financial Services	Susquehanna Growth Equity, Citi Ventures, ICONIQ Capital
+276	Nuvemshop	3.1	2021-08-17 04:00:00	Brazil	Sao Paulo	Consumer & Retail	Kaszek Ventures, Qualcomm Ventures, Accel
+277	LayerZero Labs	3	2022-03-30 04:00:00	United States	New York	Enterprise Tech	Andreessen Horowitz, FTX Ventures, Tiger Global Management
+278	Poolside	3	2024-10-02 04:00:00	France	Paris	Enterprise Tech	Felicis, Redpoint Ventures, HSBC Venture Capital
+279	Cyera	3	2024-04-09 04:00:00	United States	New York	Enterprise Tech	Accel, CyberStarts, Sequoia Capital
+280	Crusoe	3	2022-04-21 04:00:00	United States	Denver	Industrials	Bain Capital Ventures, Founders Fund, Winklevoss Capital
+281	Clio	3	2021-04-27 04:00:00	Canada	Burnaby	Enterprise Tech	OMERS Private Equity, T. Rowe Price, Technology Crossover Ventures
+282	Zhipu AI	3	2023-09-20 04:00:00	China	Beijing	Enterprise Tech	Qiming Venture Partners, Legend Capital, Jiangmen Venture Capital
+283	Island	3	2022-03-23 04:00:00	United States	Dallas	Enterprise Tech	Insight Partners, Sequoia Capital, Stripes Group
+284	Nord Security	3	2022-04-07 04:00:00	Lithuania	Vilnius	Enterprise Tech	General Catalyst, BaltCap, Novator Partners
+285	Yixia	3	2015-11-24 05:00:00	China	Beijing	Media & Entertainment	Sequoia Capital China, Sina Weibo, Kleiner Perkins Caufield & Byers, Redpoint Ventures
+286	Traveloka	3	2017-01-01 05:00:00	Indonesia	Jakarta	Consumer & Retail	Global Founders Capital, East Ventures, Expedia Inc.
+287	Monad Labs	3	2024-04-09 04:00:00	United States	New York	Financial Services	HTX Ventures, Electric Capital, Coinbase Ventures
+288	SouChe Holdings	3	2017-11-01 04:00:00	China	Hangzhou	Industrials	Morningside Ventures, Warburg Pincus, CreditEase Fintech Investment Fund
+289	BGL Group	3	2017-11-24 05:00:00	United Kingdom	Peterborough	Insurance	CPP Investment Board
+290	Circle	3	2018-05-15 04:00:00	United States	Boston	Financial Services	General Catalyst, Digital Currency Group, Accel
+291	Zuoyebang	3	2018-07-18 04:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, Xiang He Capital, GGV Capital
+292	FlixMobility	3	2019-07-18 04:00:00	Germany	Munich	Industrials	Holtzbrinck Ventures, Unternehmertum Venture Capital, General Atlantic
+293	Wildlife Studios	3	2019-12-05 05:00:00	Brazil	Sao Paulo	Media & Entertainment	Benchmark, Bessemer Venture Partners
+294	ApplyBoard	3.2	2020-05-05 04:00:00	Canada	Kitchener	Consumer & Retail	Artiman Ventures, Plug and Play Ventures, Anthos Capital
+295	Forter	3	2020-11-19 05:00:00	United States	New York	Enterprise Tech	Sequoia Capital Israel, Scale Venture Partners, Commerce Ventures
+296	Calendly	3	2021-01-26 05:00:00	United States	Atlanta	Enterprise Tech	ICONIQ Capital, OpenView Venture Partners
+297	BlockFi	3	2021-03-11 05:00:00	United States	Jersey City	Financial Services	ConsenSys Ventures, Valar Ventures, PUC
+298	ActiveCampaign	3	2021-04-21 04:00:00	United States	Chicago	Enterprise Tech	Silversmith Capital Partners, Susquehanna Growth Equity, Tiger Global Management
+299	CMR Surgical	3	2019-09-17 04:00:00	United Kingdom	Cambridge	Healthcare & Life Sciences	Cambridge Innovation Capital, LGT Capital Partners, Escala Capital
+300	Lucid Software	3	2021-06-29 04:00:00	United States	South Jordan	Enterprise Tech	Spectrum Equity, ICONIQ Capital, Grayhawk Capital
+301	Age of Learning	3	2016-05-03 04:00:00	United States	Glendale	Consumer & Retail	Iconiq Capital
+302	Zetwerk	3	2021-08-20 04:00:00	India	Bengaluru	Industrials	Sequoia Capital India, Kae Capital, Accel
+303	Carbon Health	3	2021-07-21 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Brookfield Asset Management, Blackstone, Data Collective
+304	Contentful	3	2021-07-28 04:00:00	Germany	Berlin	Enterprise Tech	Balderton Capital, General Catalyst, Tiger Global Management
+305	LaunchDarkly	3	2021-08-10 04:00:00	United States	Oakland	Enterprise Tech	Uncork Capital, Threshold Ventures, Bloomberg Beta
+306	Seismic	3	2018-12-18 05:00:00	United States	San Diego	Enterprise Tech	Jackson Square Ventures, General Atlantic, Lightspeed Venture Partners
+307	Sky Mavis	3	2021-10-04 04:00:00	Vietnam	Ho Chi Minh City	Media & Entertainment	Fabric Ventures, 500 Global, Standard Crypto
+308	Outschool	3	2021-04-14 04:00:00	United States	San Francisco	Consumer & Retail	Uniion Square Ventures, Tiger Global Management, Lightspeed Venture Capital
+309	TradingView	3	2021-10-14 04:00:00	United States	Westerville	Financial Services	Tiger Global Management, Insight Partners, Jump Capital
+310	Groww	3	2021-04-07 04:00:00	India	Bengaluru	Financial Services	Tiger Global Management, Sequoia Capital India, Ribbit Capital
+311	Podium	3	2020-04-07 04:00:00	United States	Lehi	Consumer & Retail	Accel, Summit Partners, Google Ventures
+312	Via	3.5	2020-03-30 04:00:00	United States	New York	Industrials	83North, RiverPark Ventures, Pitango Venture Capital
+313	Anchorage Digital	3	2021-12-15 05:00:00	United States	San Francisco	Financial Services	Andreessen Horowitz, Blockchain Capital, Lux Capital
+314	Inxeption	3	2022-01-13 05:00:00	United States	San Francisco	Industrials	Coatue Management, BMO Capital, Schonfeld Strategic Advisors
+315	Lattice	3	2021-03-23 04:00:00	United States	San Francisco	Enterprise Tech	Khosla Ventures, Thrive Capital, Y Combinator
+316	Flutterwave	3	2021-03-09 05:00:00	United States	San Francisco	Financial Services	Green Visor Capital, CRE Venture Capital, Greycroft
+317	Cross River Bank	3	2022-02-11 05:00:00	United States	Fort Lee	Financial Services	Battery Ventures, Andreessen Horowitz, Ribbit Capital
+318	Remote	3	2021-07-13 04:00:00	United States	San Francisco	Enterprise Tech	Index Ventures, Sequoia Capital, General Catalyst
+319	Sentry	3	2021-02-18 05:00:00	United States	San Francisco	Enterprise Tech	New Enterprise Associates, Accel, Bond
+320	TERMINUS Technology	2.96	2018-10-25 04:00:00	China	Beijing	Industrials	China Everbright Limited, IDG Capital, iFLYTEK
+321	Kraken	2.92	2019-06-25 04:00:00	United States	San Francisco	Financial Services	Bnk To The Future, Trammell Ventures, SBI Investment
+322	Workrise	2.9	2019-09-30 04:00:00	United States	Austin	Industrials	Founders Fund, Quantum Energy Partners, Bedrock Capital
+323	BharatPe	2.85	2021-07-30 04:00:00	India	New Delhi	Financial Services	Insight Partners, Sequoia Capital India, BEENEXT
+324	Gokin Solar	2.88	2022-04-13 04:00:00	China	Zhuhai	Industrials	IDG Capital, Puluo Capital, Midea Capital
+325	DriveWealth	2.85	2021-08-20 04:00:00	United States	Chatham	Financial Services	Point72 Ventures, Route 66 Ventures, Accel
+326	Meicai	2.8	2016-06-22 04:00:00	China	Beijing	Consumer & Retail	Tiger Global Management, Blue Lake Capital, ZhenFund
+327	Physical Intelligence	2.8	2024-11-04 05:00:00	United States	San Francisco	Enterprise Tech	Khosla Ventures, Sequoia Capital, Lux Capital
+328	Nutrabolt	2.79	2022-12-08 05:00:00	United States	Austin	Consumer & Retail	MidOcean Partners
+329	Baichuan AI	2.77	2023-10-17 04:00:00	China	Haidian	Enterprise Tech	Shenzhen Capital Group, Shunwei Capital
+330	Illumio	2.75	2015-04-14 04:00:00	United States	Sunnyvale	Enterprise Tech	Data Collective, Formation 8, General Catalyst Partners
+331	MasterClass	2.75	2021-05-13 04:00:00	United States	San Francisco	Media & Entertainment	Institutional Venture Partners, New Enterprise Associates, Javelin Venture Partners
+332	Dream Games	2.75	2021-06-30 04:00:00	Turkey	Istanbul	Media & Entertainment	Makers Fund, Index Ventures, Inova Ventures Participacees
+333	Transmit Security	2.74	2021-06-22 04:00:00	Israel	Tel Aviv	Enterprise Tech	General Atlantic, Insight Partners, Vintage Investment Partners
+334	Hozon Auto	3.95	2022-02-22 05:00:00	China	Shanghai	Industrials	HD Capital, Qihoo 360 Technology, China Fortune Land Development
+335	Tradeshift	2.7	2018-05-30 04:00:00	United States	San Francisco	Enterprise Tech	Notion Capital, Scentan Ventures, Kite Ventures
+336	Nextiva	2.7	2021-09-14 04:00:00	United States	Scottsdale	Enterprise Tech	Goldman Sachs Asset Management
+337	Tridge	2.7	2022-08-24 04:00:00	South Korea	Seoul	Industrials	Forest Partners, Softbank Ventures Asia
+338	Thought Machine	2.7	2021-11-29 05:00:00	United Kingdom	London	Financial Services	British Patient Capital, SEB Venture Capital, IQ Capital
+339	Starling Bank	2.69	2021-03-08 05:00:00	United Kingdom	London	Financial Services	JTC Group, Qatar Investment Authority, Fidelity Investment
+340	Figure	2.68	2024-02-23 05:00:00	United States	Sunnyvale	Industrials	Intel Capital, Parkway VC, Amazon Industrial Innovation Fund
+341	BackBase	2.66	2022-06-09 04:00:00	Netherlands	Amsterdam	Financial Services	Motive Partners
+342	ManoMano	2.6	2021-07-05 04:00:00	France	Paris	Consumer & Retail	General Atlantic, Piton Capital, Partech Partners
+343	Sourcegraph	2.62	2021-07-13 04:00:00	United States	San Francisco	Enterprise Tech	Redpoint Ventures, Goldcrest Capital, Insight Partners
+344	Pendo	2.6	2019-10-17 04:00:00	United States	Raleigh	Enterprise Tech	Contour Venture Partners, Battery Ventures, Core Capital Partners
+345	Cursor	2.6	2024-12-20 05:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Thrive Capital, OpenAI Startup Fund
+346	Plume	2.6	2021-02-23 05:00:00	United States	Palo Alto	Industrials	Insight Partners, Jackson Square Ventures, Liberty Gloval Ventures
+347	Moglix	2.6	2021-05-17 04:00:00	Singapore	\N	Industrials	Jungle Ventures, Accel, Venture Highway
+348	Axonius	2.6	2021-03-01 05:00:00	United States	New York	Enterprise Tech	Vertex Ventures Israel, Bessemer Venture Partners, Emerge
+349	Xinchao Media	2	2018-04-09 04:00:00	China	Chengdu	Media & Entertainment	JD.com, Baidu, Vision Plus Capital
+350	JumpCloud	2.62	2021-09-13 04:00:00	United States	Louisville	Enterprise Tech	Foundry Group, General Atlantic, BlackRock
+351	Unico	2.6	2021-08-03 04:00:00	Brazil	Sao Paulo	Enterprise Tech	Big Bets, General Atlantic, SOFTBANK Latin America Ventures
+352	Bending Spoons	2.55	2024-02-15 05:00:00	Italy	Milan	Consumer & Retail	Durable Capital Partners, Adjacent, Creator Partners
+353	JUST Egg	2.59	2017-11-30 05:00:00	United States	San Francisco	Consumer & Retail	Khosla Ventures, Horizons Ventures, Founders Fund
+354	Groq	2.5	2021-04-14 04:00:00	United States	Mountain View	Enterprise Tech	TDK Ventures, Social Capital, D1 Capital Partners
+355	Jetti Resources	2.5	2022-10-24 04:00:00	United States	Boulder	Industrials	BMW i Ventures, BHP Ventures
+356	Claroty	2.5	2021-06-17 04:00:00	United States	New York	Enterprise Tech	Bessemer Venture Partners, MoreVC, Team8
+357	Vista Global	2.5	2017-08-23 04:00:00	United Arab Emirates	Dubai	Industrials	Rhone Capital
+358	BYTON	2.5	2018-04-20 04:00:00	China	Nanjing	Industrials	FAW Group, Tencent Holdings, Tus Holdings
+359	Side	2.5	2021-03-22 04:00:00	United States	San Francisco	Financial Services	Coatue Managemeny, Trinity Ventures, Matrix Partners
+360	Infra.Market	2.5	2021-02-25 05:00:00	India	Thane	Industrials	Accel, Tiger Global Management, Nexus Venture Partners
+361	Varo Bank	2.5	2021-09-09 04:00:00	United States	San Francisco	Financial Services	Warburg Pincus, The Rise Fund, HarbourVest Partners
+362	Cato Networks	3	2020-11-17 05:00:00	Israel	Tel Aviv	Enterprise Tech	Aspect Ventures, SingTel Innov8, Greylock Partners
+363	Sword Health	3	2021-11-22 05:00:00	United States	New York	Healthcare & Life Sciences	Khosla Ventures, Green Innovations, Founders Fund
+364	Aura	2.5	2021-06-09 04:00:00	United States	Burlington	Consumer & Retail	Warburg Pincus, General Catalyst
+365	TensTorrent	2.6	2021-05-05 04:00:00	Canada	Toronto	Enterprise Tech	Eclipse Ventures, Fidelity Investments, Moore Capital Management
+366	Sysdig	2.5	2021-04-28 04:00:00	United States	San Francisco	Enterprise Tech	Accel, Bain Capital Ventures, Insight Partners
+367	Uniphore	2.5	2022-02-16 05:00:00	United States	Palo Alto	Enterprise Tech	Chiratae Ventures, March Capital Partners, National Grid Partners
+368	Somatus	2.5	2022-02-23 05:00:00	United States	McLean	Healthcare & Life Sciences	The Blue Venture Fund, Flare Capital Partners, Longitude Capital
+369	Immutable	2.5	2022-03-07 05:00:00	Australia	Sydney	Media & Entertainment	Fabric Ventures, AirTree Ventures, Temasek
+370	SiFive	2.5	2022-03-16 04:00:00	United States	San Mateo	Enterprise Tech	Sutter Hill Ventures, Osage University Partners, Spark Capital
+371	Games24x7	2.5	2022-03-30 04:00:00	India	Mumbai	Media & Entertainment	Tiger Global Management, The Raine Group, Malabar Investments
+372	Fetch	2.5	2021-03-31 04:00:00	United States	Madison	Consumer & Retail	Greycroft, Loeb.NYC, DST Global
+373	Coda Payments	2.5	2022-04-15 04:00:00	Singapore	\N	Financial Services	GIC. Apis Partners, Insight Partners
+374	DriveNets	2.5	2021-01-27 05:00:00	Israel	Ra'anana	Enterprise Tech	Bessemer Venture Partners, Pitango Venture Capital, D1 Capital Partners
+375	Hibob	2.45	2021-10-12 04:00:00	Israel	Tel Aviv	Enterprise Tech	Bessemer Venture Partners, Eight Roads Ventures, Battery Ventures
+376	Vanta	2.45	2022-06-07 04:00:00	United States	San Francisco	Enterprise Tech	Craft Ventures, Sequoia Capital, Verissimo Ventures
+377	Mobile Premier League	2.45	2021-09-15 04:00:00	India	Bengaluru	Media & Entertainment	Sequoia Capital India, RTP Global, Go-Ventures
+378	insitro	2.44	2021-03-15 04:00:00	United States	South San Francisco	Healthcare & Life Sciences	Foresite Capital, ARCH Venture Partners, Third Rock Ventures
+379	Cgtz	2.41	2017-02-21 05:00:00	China	Hangzhou	Financial Services	Shunwei Capital Partners, China Media Group, Guangzhou Huiyin Aofeng Equity Investment Fund
+380	Star Charge	2.41	2021-05-19 04:00:00	China	Changzhou	Industrials	Shunwei Capital Partners, China Media Group, Guangzhou Huiyin Aofeng Equity Investment Fund
+381	Carbon	2.4	2015-08-20 04:00:00	United States	Redwood City	Industrials	Google Ventures, Sequoia Capital, Wakefield Group
+382	Rokt	2.4	2021-12-16 05:00:00	United States	New York	Consumer & Retail	Square Peg Capital, TDM Growth Partners, Tiger Global Management
+383	Paxos	2.4	2021-04-29 04:00:00	United States	New York	Financial Services	Liberty City Ventures, RRE Ventures, Mithril Capital Management
+384	BitSight Technologies	2.4	2021-09-13 04:00:00	United States	Boston	Enterprise Tech	Menlo Ventures, GGV Capital, Flybridge Capital Partners
+385	Trumid	2.4	2020-07-15 04:00:00	United States	New York	Financial Services	T. Rowe Price, Dragoneer Investment Group, BlackRock
+386	ABL Space Systems	2.4	2021-03-25 04:00:00	United States	El Segundo	Industrials	T. Rowe Price, Lockheed Martin Ventures, Fidelity Investment
+387	HoneyBook	2.4	2021-05-04 04:00:00	United States	San Francisco	Enterprise Tech	Norwest Venture Partners, Hillsven Capital, Aleph
+388	Beta Technologies	2.4	2022-04-19 04:00:00	United States	South Burlington	Industrials	The Rise Fund, Fidelity Investments. RedBird Capital Partners
+389	Project44	2.62	2021-06-01 04:00:00	United States	Chicago	Enterprise Tech	Emergence Capital Partners, 8VC, Chicago Ventures
+390	Freenome	2.62	2020-08-26 04:00:00	United States	South San Francisco	Healthcare & Life Sciences	Andreessen Horowitz, Data Collective, Roche Venture Fund
+391	ManyPets	2.35	2021-06-01 04:00:00	United Kingdom	London	Insurance	Octopus Ventures, Munich Re Ventures, CommerzVentures
+392	Jobandtalent	2.35	2021-12-01 05:00:00	Spain	Madrid	Enterprise Tech	Kibo Ventures, SoftBank Group, Atomico
+393	WEMAKEPRICE	2.34	2015-09-09 04:00:00	South Korea	Seoul	Consumer & Retail	IMM Investment, NXC
+394	Biren Technology	2.32	2020-08-18 04:00:00	China	Shanghai	Enterprise Tech	V FUND, IDG Capital, Green Pine Capital Partners
+395	Transcarent	2.2	2022-01-11 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Alta Partners, General Catalyst, Jove Equity Partners
+396	Voodoo	2.31	2020-08-17 04:00:00	France	Paris	Media & Entertainment	Tencent Holdings, Goldman Sachs
+397	Shield AI	2.8	2021-08-24 04:00:00	United States	San Diego	Industrials	Andreessen Horowitz, Homebrew, Point72 Ventures
+398	PhysicsWallah	2.8	2022-06-07 04:00:00	India	Uttar Pradesh	Consumer & Retail	GSV Ventures, WestBridge Capital
+399	Uptake	2.3	2015-10-27 04:00:00	United States	Chicago	Industrials	Revolution, New Enterprise Associates, Caterpillar
+400	Motive	2.85	2019-04-23 04:00:00	United States	San Francisco	Industrials	Google Ventures, Index Ventures, Scale Venture Partners
+401	Greenlight	2.3	2020-09-24 04:00:00	United States	Atlanta	Financial Services	Relay Ventures, TTV Capital, Canapi Ventures
+402	MoMo	2.27	2021-12-10 05:00:00	Vietnam	Ho Chi Minh City	Financial Services	Goodwater Capital, Warburg Pincus, GS Growth
+403	Story Protocol	2.25	2024-08-21 04:00:00	United States	Bellevue	Media & Entertainment	A16z Crypto, Andreessen Horowitz, Two Small Fish Ventures
+404	Algolia	2.25	2021-07-28 04:00:00	United States	San Francisco	Enterprise Tech	Accel, Alven Capital, Storm Ventures
+405	Pattern	2.25	2021-10-06 04:00:00	United States	Lehi	Consumer & Retail	Knox Lane, Ainge Advisory, Carlson Private Capital Partners
+406	Newfront Insurance	2.2	2022-04-12 04:00:00	United States	San Francisco	Insurance	Founders Fund, Meritech Capital Partners, GS Growth
+407	NuCom Group	2.2	2018-02-22 05:00:00	Germany	Unterfoehring	Consumer & Retail	General Atlantic
+408	Skydio	2.2	2021-02-25 05:00:00	United States	Redwood City	Industrials	Andreessen Horowitz, Andreessen Horowitz, Institutional Venture Partners, Accel
+409	Uala	2.75	2021-08-13 04:00:00	Argentina	Buenos Aires	Financial Services	Soros Fund Management, Ribbit Capital, Monashees+
+410	Current	2.2	2021-04-27 04:00:00	United States	New York	Financial Services	Expa, QED Investors, Foundation Capital
+411	Bitso	2.2	2021-05-05 04:00:00	Mexico	Mexico City	Financial Services	Pantera Capital, QED Investors, Coinbase Ventures
+412	Gympass	2.4	2019-06-12 04:00:00	United States	New York	Healthcare & Life Sciences	General Atlantic, SoftBank Group, Atomico
+413	Dialpad	2.2	2020-10-06 04:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Google Ventures, Section 32
+414	G7 Networks	2.2	2022-02-15 05:00:00	China	Beijing	Industrials	Eastern Bell Capital 32, SDIC CMC Investment Management, Trustbridge Partners
+415	BloomReach	2.2	2022-02-23 05:00:00	United States	Mountain View	Consumer & Retail	Bain Capital Ventures, Sixth Street Growth, Lightspeed Venture Partners
+416	Motif FoodWorks	2.2	2021-06-16 04:00:00	United States	Boston	Industrials	General Atlantic, Breakthrough Energy Ventures, Viking Global Investors
+417	Accelerant	2.4	2022-01-12 05:00:00	United Kingdom	Colchester	Insurance	Deer Park Road, Altamont Capital Partners, Eldridge
+418	YITU Technology	2.17	2018-03-08 05:00:00	China	Shanghai	Enterprise Tech	Sequoia Capital China, Banyan Capital
+419	Addepar	2.17	2021-06-15 04:00:00	United States	Mountain View	Financial Services	8VC, D1 Capital Partners, Sway Ventures
+420	Qualia	2.17	2020-12-21 05:00:00	United States	San Francisco	Financial Services	8VC, Menlo Ventures, Tiger Global Management
+421	Neo4j	2	2021-06-17 04:00:00	United States	San Mateo	Enterprise Tech	Eight Roads Ventures, One Peak Partners, Creandum
+422	CloudWalk	2.15	2021-09-08 04:00:00	Brazil	Sao Paulo	Financial Services	Plug and Play Ventures, Valor Capital Group, DST Global
+423	Xaira Therapeutics	2.15	2024-04-23 04:00:00	United States	San Francisco	Healthcare & Life Sciences	ARCH Venture Partners, Foresite Capital, Two Sigma Ventures
+424	CoinDCX	2.15	2021-08-10 04:00:00	India	Maharashtra	Financial Services	Polychain Capital, Coinbase Ventures, Jump Capital
+425	Eightfold	2.1	2020-10-27 04:00:00	United States	Santa Clara	Enterprise Tech	Foundation Capital, Institutional Venture Partners, General Catalyst
+426	Urban Company	2.1	2021-04-27 04:00:00	India	Gurgaon	Consumer & Retail	VY Capital, Accel, Elevation Capital
+427	Moveworks	2.1	2021-06-30 04:00:00	United States	Mountain View	Enterprise Tech	Lightspeed Venture Partners, Sapphire Ventures, Kleiner Perkins Caufield & Byers
+428	Medable	2.1	2021-10-26 04:00:00	United States	Palo Alto	Healthcare & Life Sciences	GSR Ventures, Sapphire Ventures, Streamlined Ventures
+429	GoCardless	2.1	2022-02-08 05:00:00	United Kingdom	London	Financial Services	Accel, Passion Capital, Balderton Capital
+430	Aledade	3.5	2021-01-19 05:00:00	United States	Bethesda	Healthcare & Life Sciences	Venrock, CVF Capital Partners, ARCH Venture Partners
+431	A24 Films	3.5	2022-03-09 05:00:00	United States	New York	Media & Entertainment	Stripes Group, Neuberger Berman
+432	Forto	2.1	2021-06-21 04:00:00	Germany	Berlin	Industrials	Cherry Ventures, Northzone Ventures, Global Founders Capital
+433	bolttech	2.1	2021-07-01 04:00:00	Singapore	\N	Insurance	Mundi Ventures, Doqling Capital Partners, Activant Capital
+434	Synthesia	2.1	2023-06-13 04:00:00	United Kingdom	London	Enterprise Tech	Google Ventures, Kleiner Perkins Caufield & Byers, FirstMark Capital
+435	Jeeves	2.1	2022-03-14 04:00:00	United States	Orlando	Enterprise Tech	Tencent Holdings, CRV, Clocktower Technology Ventures
+436	Viva Wallet	2.05	2022-12-17 05:00:00	Greece	Athens	Financial Services	Breyer Capital, Hedosophia
+437	MUSINSA	2	2019-11-11 05:00:00	South Korea	Seoul	Consumer & Retail	Sequoia Capital
+438	DeepL	2	2023-01-11 05:00:00	Germany	Cologne	Enterprise Tech	Benchmark, btov Partners, Bessemer Venture Partners
+439	Melio	2	2021-01-25 05:00:00	United States	New York	Financial Services	Accel, Aleph, American Express Ventures
+440	Firefly Aerospace	2	2024-05-04 04:00:00	United States	Cedar Park	Industrials	Noosphere Ventures, RPM Ventures, SMS Capital Investment
+441	Cognition AI	2	2024-04-24 04:00:00	United States	San Francisco	Enterprise Tech	Founders Fund, Khosla Ventures
+442	Babel Finance	2	2022-05-25 04:00:00	Hong Kong	Hong Kong	Financial Services	Dragonfly Capital, BAI Capital, 10T Fund
+443	Trendy Group International	2	2012-02-13 05:00:00	Hong Kong	Kowloon	Consumer & Retail	L Capital Partners
+444	GrubMarket	2	2021-09-14 04:00:00	United States	San Francisco	Consumer & Retail	GGV Capital, BlackRock, ACE & Company
+445	BeZero	2	2022-11-14 05:00:00	United Kingdom	London	Enterprise Tech	Contrarian Ventures, Molten Ventures, Hitachi Ventures 32
+446	Cohere	2	2023-05-02 04:00:00	Canada	Toronto	Enterprise Tech	Index Ventures, Salesforce Ventures, Section 32
+447	Cohere	2	2023-05-02 04:00:00	Canada	Toronto	Enterprise Tech	Index Ventures, Salesforce Ventures, Section 32
+448	GO1	2	2021-07-19 04:00:00	Australia	Brisbane	Enterprise Tech	Y Combinator, M12, SEEK
+449	Clear Street	2	2022-04-29 04:00:00	United States	New York	Financial Services	NextGen Venture Partners, Prysm Capital, McLaren Strategic Ventures
+450	Drata	2	2021-11-08 05:00:00	United States	San Diego	Enterprise Tech	Cowboy Ventures, Leaders Fund, GGV Capital
+451	Mysten Labs	2	2022-09-08 04:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Coinbase Ventures, Circle Ventures
+452	Liquid AI	2	2024-12-13 05:00:00	United States	Cambridge	Enterprise Tech	OSS Capital, Duke Capital Partners, Samsung NEXT
+453	Avant	2	2012-12-17 05:00:00	United States	Chicago	Financial Services	RRE Ventures, Tiger Global, August Capital
+454	Tubatu.com	2	2015-03-09 04:00:00	China	Shenzhen	Consumer & Retail	Sequoia Capital China, Matrix Partners China, 58.com
+455	BlaBlaCar	2	2015-09-16 04:00:00	France	Paris	Consumer & Retail	Accel Partners, Index Ventures, Insight Venture Partners
+456	HuiMin	2	2016-09-05 04:00:00	China	Beijing	Consumer & Retail	Zheshang Venture Capital, GP Capital, Western Capital Management
+457	Preferred Networks	2	2018-05-17 04:00:00	Japan	Tokyo	Industrials	Toyota Motor Corporation, Mizuho Financial Group, FANUC
+458	Formlabs	2	2018-08-01 04:00:00	United States	Somerville	Industrials	Pitango Venture Capital, DFJ Growth Fund, Foundry Group
+459	Calm	2	2019-02-06 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Insight Venture Partners, TPG Growth, Sound Ventures
+460	Kaseya	2	2019-03-27 04:00:00	United States	Miami	Enterprise Tech	Insight Partners, TPG Alternative & Renewable Technologies, Ireland Strategic Investment Fund
+461	Mafengwo	2	2019-05-23 04:00:00	China	Beijing	Consumer & Retail	Qiming Venture Partners, Capital Today, General Atlantic
+462	Druva	2	2019-06-20 04:00:00	United States	Sunnyvale	Enterprise Tech	Nexus Venture Partners, Tenaya Capital, Sequoia Capital
+463	Kujiale	2	2019-10-25 04:00:00	China	Hangzhou	Consumer & Retail	GGV Capital, IDG Capital, Linear Venture
+464	AppsFlyer	2	2020-01-21 05:00:00	United States	San Francisco	Enterprise Tech	Magma Venture Partners, Pitango Venture Capital, Qumra Capital
+465	Redis	2	2020-08-25 04:00:00	United States	Mountain View	Enterprise Tech	Viola Ventures, Dell Technologies Capital, Bain Capital Ventures
+466	Xingyun Group	2	2020-09-24 04:00:00	China	Shenzhen	Consumer & Retail	Matrix Partners China, Eastern Bell Capital, Hongtai Capital Holdings
+467	Unqork	2	2020-10-06 04:00:00	United States	New York	Insurance	Blackrock, capitalG, World Lab Innovation
+468	Virta Health	2	2020-12-02 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Caffeinated Capital, Obvious Ventures, Venrock
+469	ISN	2	2020-12-17 05:00:00	United States	Dallas	Industrials	Blackstone
+470	Earnix	2	2021-02-21 05:00:00	Israel	Giv'atayim	Insurance	Jerusalem Venture Partners, Israel Growth Partners, Insight Partners
+471	Clearco	2	2021-04-20 04:00:00	Canada	Toronto	Financial Services	Highland Capital Partners, Oak HC/FT Partners, Emergence Capital Partners
+472	Hive	2	2021-04-21 04:00:00	United States	San Francisco	Enterprise Tech	Tomales Bay Capital, Bain & Company, General Catalyst
+473	Kry	2	2021-04-27 04:00:00	Sweden	Stockholm	Healthcare & Life Sciences	Index Ventures, Creandum, Accel
+474	Kajabi	2	2021-05-04 04:00:00	United States	Irvine	Media & Entertainment	Meritech Capital Partners, Tiger Global Management, Spectrum Equity
+475	Ethos	2.7	2021-05-11 04:00:00	United States	San Francisco	Insurance	Sequoia Capital, Google Ventures, Accel
+476	PayFit	2.1	2022-01-06 05:00:00	United Kingdom	London	Enterprise Tech	Accel, frst, Kima Ventures
+477	Beisen	2	2021-05-11 04:00:00	China	Beijing	Enterprise Tech	Matrix Partners China, Sequoia Capital China, Genesis Capital
+478	Pipe	2	2021-05-19 04:00:00	United States	Miami	Financial Services	next47, MaC Venture Capital, FinVC
+479	Iterable	2	2021-06-15 04:00:00	United States	San Francisco	Enterprise Tech	CRV, Blue Cloud Ventures, Index Ventures
+480	Astronergy	1.82	2023-07-25 04:00:00	China	Haining	Industrials	
+481	Bunq	1.8	2021-06-18 04:00:00	Netherlands	Amsterdam	Financial Services	Undisclosed
+482	Quest Global	1.8	2023-08-08 04:00:00		Singapore	Industrials	
+483	Clip	2	2021-06-10 04:00:00	Mexico	Mexico City	Financial Services	Alta Ventures Mexico, General Atlantic, SoftBank Group
+484	Loggi	2	2019-06-05 04:00:00	Brazil	Sao Paulo	Industrials	Qualcomm Ventures, SoftBank Group. Monashees+
+485	MURAL	2	2021-07-20 04:00:00	United States	San Francisco	Enterprise Tech	Insight Partners, Tiger Global Management, Gradient Ventures
+486	OCSiAl	2	2019-03-04 05:00:00	Luxembourg	Leudelange	Industrials	A&NN, Rusnano
+487	Divvy Homes	2	2021-08-13 04:00:00	United States	San Francisco	Financial Services	Andreessen Horowitz, Caffeinated Capital, SciFi VC
+488	Apeel Sciences	2	2020-05-26 04:00:00	United States	Goleta	Consumer & Retail	Upfront Ventures, Tao Capital Partners, Andreessen Horowitz
+489	Opay	2	2021-08-23 04:00:00	Nigeria	Lagos	Financial Services	Sequoia Capital China, Source Code Capital, Redpoint Ventures China
+490	Aviatrix	2	2021-09-08 04:00:00	United States	Santa Clara	Enterprise Tech	Ignition Partners, Formation 8, CRV
+491	SmartNews	2	2019-08-05 04:00:00	Japan	Tokyo	Media & Entertainment	Japan Post Capital, Globis Capital Partners, Atomico
+492	Misfits Market	2	2021-04-21 04:00:00	United States	Pennsauken	Consumer & Retail	Accel, D1 Capita Partners, Greenoaks Capital Management
+493	Advance Intelligence Group	2	2021-09-23 04:00:00	Singapore	\N	Financial Services	Vision Plus Capital, GSR Ventures, ZhenFund
+494	Modern Treasury	2	2021-10-06 04:00:00	United States	San Francisco	Financial Services	Benchmark, Altimeter Capital, Quiet Capital
+495	Magic Leap	2	2014-10-21 04:00:00	United States	Plantation	Enterprise Tech	Obvious Ventures, Qualcomm Ventures, Andreessen Horowitz
+496	ClickHouse	2	2021-10-28 04:00:00	United States	Portola Valley	Enterprise Tech	Lightspeed Venture Partners, Almaz Capital Partners, Altimeter Capital
+497	Everlaw	2	2020-03-10 04:00:00	United States	Oakland	Enterprise Tech	K9 Ventures, Menlo Ventures, Andreessen Horowitz
+498	Zilch	2	2021-11-10 05:00:00	United Kingdom	London	Financial Services	Gauss Ventures, Ventura Capital, dmg ventures
+499	VerbIT	2	2021-06-08 04:00:00	United States	New York	Enterprise Tech	ClalTech, Vertex Ventures, Oryzn Capital
+500	StarkWare	8	2021-11-17 05:00:00	Israel	Netanya	Enterprise Tech	Sequoia Capital, Paradigm, Pantera Capital
+501	Netlify	2	2021-11-17 05:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Kleiner Perkins Caufield & Byers, EQT Ventures
+502	LTK	2	2021-11-22 05:00:00	United States	Dallas	Media & Entertainment	SoftBank Group, Maverick Capital
+503	Trax	2	2019-07-22 04:00:00	Singapore	\N	Consumer & Retail	Hopu Investment Management, Boyu Capital, DC Thomson Ventures
+504	Exotec	2	2022-01-17 05:00:00	France	Croix	Industrials	Breega Capital, Iris Capital, 360 Capital Partners
+505	Dremio	2	2021-01-06 05:00:00	United States	Santa Clara	Enterprise Tech	Lightspeed Venture Partners, Redpoint Ventures, Norwest Venture Partners
+506	Akulaku	2	2022-02-15 05:00:00	Indonesia	Jakarta	Financial Services	DCM Ventures, IDG Capital, Siam Commercial Bank
+507	Cloudinary	2	2022-02-15 05:00:00	United States	Santa Clara	Media & Entertainment	Blackstone, Bessemer Venture Partners
+508	Lunar	2	2021-07-12 04:00:00	Denmark	Aarhus	Financial Services	SEED Capital, Greyhound Capital, Socii Capital
+509	UpGrad	2.25	2021-08-09 04:00:00	India	Mumbai	Consumer & Retail	Qualcomm Ventures, Accel, Canaan Partners
+510	Salsify	2	2022-04-13 04:00:00	United States	Boston	Consumer & Retail	Matrix Partners, North Bridge Venture Partners, Venrock
+511	CertiK	2	2022-03-31 04:00:00	United States	New York	Enterprise Tech	Tiger Global Management, Lightspeed Venture Partners, Hillhouse Capital Management
+512	ROX Motor	2	2022-04-29 04:00:00	China	Shanghai	Industrials	Sequoia Capital China, IDG Capital, Qiming Venture Partners
+513	Devo Technology	2	2021-10-26 04:00:00	United States	Cambridge	Enterprise Tech	Insight Partners, Kibo Ventures, Bessemer Venture Partners
+514	ShiftKey	2	2023-01-11 05:00:00	United States	Dallas	Healthcare & Life Sciences	Health Velocity Capital
+515	Rimac Automobili	2	2022-06-01 04:00:00	Croatia	Sveta Nedelja	Industrials	Porsche, InvestIndustrial, SoftBank Group
+516	Geek+	2	2018-11-21 05:00:00	China	Beijing	Industrials	Volcanics Ventures, Vertex Ventures China, Warburg Pincus
+517	21.co	2	2022-09-06 04:00:00	United States	New York	Financial Services	Quiet Ventures, ETFS Capital, Collab+Currency
+518	Solugen	2	2021-09-10 04:00:00	United States	Houston	Industrials	Fifty Years Fund, Refactor Capital, Temasek
+519	ZigBang	1.93	2022-06-07 04:00:00	South Korea	Seoul	Financial Services	Black Pearl Ventures, Stonebridge Ventures, Yuanta Investment Korea
+520	SemiDrive	1.93	2024-07-14 04:00:00	China	Nanjing	Industrials	Vinno Capital, Shanghai STVC Group, Guozhong Venture Capital Management
+521	Ankorstore	1.98	2022-01-10 05:00:00	France	Paris	Consumer & Retail	Global Founders Capital, Aglae Ventures, Alven Capital
+522	InVision	1.9	2017-11-01 04:00:00	United States	New York	Enterprise Tech	FirstMark Capital, Tiger Global Management, ICONIQ Capital
+523	Writer	1.9	2024-11-12 05:00:00	United States	San Francisco	Enterprise Tech	Aspect Ventures, Upfront Ventures, Balderton Capital
+524	eDaili	1.9	2019-02-01 05:00:00	China	Shanghai	Financial Services	K2VC, Lightspeed China Partners, Sky9 Capital
+525	commercetools	1.9	2021-09-13 04:00:00	Germany	Munich	Enterprise Tech	High-Tech Grunderfonds, Bayern Kapital, Accel
+526	NinjaOne	1.9	2024-02-06 05:00:00	United States	Austin	Enterprise Tech	
+527	MX	1.9	2021-01-13 05:00:00	United States	Lehi	Financial Services	Point72 Ventures, Pelion Venture Partners, Commerce Ventures
+528	CoinSwitch	1.9	2021-10-06 04:00:00	India	Bangalore	Financial Services	Tiger Global Management, Sequoia Capital India, Ribbit Capital
+529	Acorns	1.9	2022-03-09 05:00:00	United States	Irvine	Financial Services	e.ventures, Bain Capital Ventures, Greycroft
+530	Fever	1.96	2022-01-26 05:00:00	United States	New York	Media & Entertainment	Accel, 14W, GS Growth
+531	Roofstock	1.94	2022-03-10 05:00:00	United States	Oakland	Financial Services	Khosla Ventures, Bain Capital Ventures, Lightspeed Venture Partners
+532	thatgamecompany	1.94	2022-03-03 05:00:00	United States	Los Angeles	Media & Entertainment	Benchmark, Sequoia Capital, TPG Capital
+533	ConcertAI	1.9	2022-03-29 04:00:00	United States	Boston	Healthcare & Life Sciences	Sixth Street Partners, Declaration Partners, Maverick Ventures Israel
+534	Material Bank	1.9	2022-05-06 04:00:00	United States	Boca Raton	Industrials	Bain Capital Ventures, SoftBank Group, Fifth Wall Ventures
+535	Volocopter	1.87	2022-03-04 05:00:00	Germany	Bruchsal	Industrials	btov Partners, Geely, Intel Capital
+536	ENOVATE	1.85	2019-04-15 04:00:00	China	Shanghai	Industrials	Automobile Industry Guidance Fund
+537	MEGAZONE	1.83	2022-08-16 04:00:00	South Korea	Seoul	Enterprise Tech	Salesforce Ventures, ATP Investment, kt investment
+538	CFGI	1.85	2021-09-15 04:00:00	United States	Boston	Financial Services	The Carlyle Group, CVC Capital Partners
+539	ZocDoc	1.8	2015-08-20 04:00:00	United States	New York	Healthcare & Life Sciences	Founders Fund, Khosla Ventures, Goldman Sachs
+540	ID.me	1.8	2021-03-19 04:00:00	United States	McLean	Consumer & Retail	Moonshots Capital, BoxGroup, Blu Venture Investors
+541	Scroll	1.8	2023-03-14 04:00:00	Seychelles	\N	Financial Services	OKX Ventures, Sequoia Capital China, IOSG
+542	Diamond Foundry	1.8	2021-03-29 04:00:00	United States	San Francisco	Industrials	Fashion Tech Lab, Fidelity Investments, Vast Ventures
+543	Quantexa	1.8	2023-04-03 04:00:00	United Kingdom	London	Enterprise Tech	AlbionVC, Dawn Capital, HSBC Venture Capital
+544	FullStory	1.8	2021-08-04 04:00:00	United States	Atlanta	Enterprise Tech	Google Ventures, Kleiner Perkins Caufield & Byers, Stripes Group
+545	Lightricks	1.8	2019-07-31 04:00:00	Israel	Jerusalem	Media & Entertainment	Viola Ventures, Insight Partners, ClalTech, Goldman Sachs
+546	Opentrons	1.8	2021-09-23 04:00:00	United States	New York	Healthcare & Life Sciences	SOSV, Khosla Ventures, Lerer Hippeau
+547	Kindbody	1.8	2023-03-02 05:00:00	United States	Kindbody	Healthcare & Life Sciences	RRE Ventures, Google Ventures, Bramalea Partners
+548	Slice	1.8	2021-11-28 05:00:00	India	Bengaluru	Financial Services	Gunosy Capital, Blume Ventures, Das Capital
+549	Cambrian BioPharma	1.79	2021-10-26 04:00:00	United States	Brooklyn	Healthcare & Life Sciences	Future Ventures, Apeiron Investment Group, Moore Capital Management
+550	Trulioo	1.75	2021-06-07 04:00:00	Canada	Vancouver	Financial Services	Blumberg Capital, American Express Ventures, BDC Venture Capital
+551	Creditas	1.75	2020-12-18 05:00:00	Brazil	Sao Paulo	Financial Services	Kaszek Ventures, Amadeus Capital Partners, Quona Capital
+552	BitGo	1.75	2023-08-16 04:00:00	United States	Palo Alto	Financial Services	Redpoint Ventures, Craft Ventures, Bridgescale Partners
+553	Spinny	1.75	2021-11-24 05:00:00	India	Gurugram	Industrials	General Catalyst, Eleation Capital, Avenir Growth Capital
+554	Orca Security	1.8	2021-03-23 04:00:00	United States	Portland	Enterprise Tech	YL Ventures, Redpoint Ventures, GGV Capital
+555	Apus Group	1.73	2015-01-16 05:00:00	China	Beijing	Consumer & Retail	Redpoint Ventures, QiMing Venture Partners, Chengwei Capital
+556	Razor	1.7	2021-11-08 05:00:00	Germany	Berlin	Consumer & Retail	Global Founders Capital, 468 Capital, Redalpine Venture Partners
+557	Micro Connect	1.7	2023-08-02 04:00:00		Hong Kong	Financial Services	HongShan, Horizons Ventures, Lenovo Capital and Incubator Group
+558	DailyPay	1.7	2021-05-18 04:00:00	United States	New York	Financial Services	RPM Ventures, Inspiration Ventures, Carrick Capital Partners
+559	Udaan	1.3	2018-09-04 04:00:00	India	Bengaluru	Consumer & Retail	DST Global, Lightspeed Venture Partners, Microsoft ScaleUp
+560	Harry's	1.7	2018-02-16 05:00:00	United States	New York	Consumer & Retail	Thrive Capital, Tiger Global Management, Temasek
+561	PAX	1.7	2018-10-22 04:00:00	United States	San Francisco	Consumer & Retail	Tao Capital Partners, Global Asset Capital, Tiger Global Management
+562	DispatchHealth	1.7	2021-03-03 05:00:00	United States	Denver	Healthcare & Life Sciences	Alta Partners, Questa Capital, Echo Health Ventures
+563	Pax8	1.7	2022-04-11 04:00:00	United States	Greenwood Village	Enterprise Tech	Liberty Global Ventures, Sageview Capital, Blue Cloud Ventures
+564	Multiverse	1.7	2022-06-08 04:00:00	United Kingdom	London	Enterprise Tech	Lightspeed Venture Partners, Google Ventures, General Catalyst
+565	Front	1.7	2022-06-28 04:00:00	United States	San Francisco	Enterprise Tech	Sequoia Capital, Uncork Capital, Salesforce Ventures
+566	Redesign Health	1.7	2022-09-13 04:00:00	United States	New York	Healthcare & Life Sciences	General Catalyst, Samsung NEXT, CVS Health Partners
+567	Tessera Therapeutics	1.69	2022-04-19 04:00:00	United States	Cambridge	Healthcare & Life Sciences	Altitude Life Science Ventures, SoftBank Group, Alaska Permanent Fund
+568	SafetyCulture	1.67	2021-05-03 04:00:00	Australia	Sydney	Industrials	Blackbird Ventures, IndexVentures, Tiger Global Management
+569	Ascend Elements	1.67	2023-09-06 04:00:00	United States	Westborough	Industrials	At One Ventures, Hitachi Ventures, Trumpf Venture
+570	Uniswap	1.66	2022-10-13 04:00:00	United States	New York	Financial Services	A16z Crypto, Variant Fund, Paradigm
+571	Kredivo Holdings	1.66	2022-08-15 04:00:00	Singapore	\N	Financial Services	Jungle Ventures, Square Peg Capital, OpenSpace Ventures
+572	Unite Us	1.6	2021-03-16 04:00:00	United States	New York	Healthcare & Life Sciences	Insight Partners, Sequoia Capital, Index Ventures
+573	CircleCI	1.7	2021-05-11 04:00:00	United States	San Francisco	Enterprise Tech	Threshold Ventures, Baseline Ventures, Harrison Metal
+574	Wave	1.7	2021-09-07 04:00:00	Senegal	Dakar	Financial Services	Stripe, Founders Fund, Partech Partners
+575	Dragos	1.7	2021-10-28 04:00:00	United States	Hanover	Industrials	DataTribe, Energy Impact Partners, AllegisCyber Capital
+576	Reltio	1.7	2021-11-04 04:00:00	United States	Redwood City	Enterprise Tech	Crosslink Capital, .406 Ventures, Sapphire Ventures
+577	H2O.ai	1.7	2021-11-07 04:00:00	United States	Mountain View	Enterprise Tech	Nexus Venture Partners, Transamerica Ventures, Crane Venture Partners
+578	ZenBusiness	1.7	2021-11-09 05:00:00	United States	Austin	Enterprise Tech	Greycroft, Lerer Hippeau, Geekdom Fund
+579	Carsome	1.7	2021-07-12 04:00:00	Malaysia	Selangor	Industrials	Gobi Partners, 500 Startups, Ondine Capital
+580	Productboard	1.73	2022-02-02 05:00:00	United States	San Francisco	Enterprise Tech	Index Ventures, Kleiner Perkins Caufield & Byers, Bessemer Venture Partners
+581	Spotter	1.7	2022-02-16 05:00:00	United States	Los Angeles	Financial Services	SoftBank Group, Access Industries, Crossbeam Venture Partners
+582	Optimism	1.65	2022-03-17 04:00:00	United States	San Francisco	Enterprise Tech	Paradigm, Huobi Ventures, Andreessen Horowitz
+583	Incredible Health	1.65	2022-08-17 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Obvious Ventures, Andreessen Horowitz, NFX
+584	Jusfoun Big Data	1.62	2018-07-09 04:00:00	China	Beijing	Enterprise Tech	Boxin Capital, DT Capital Partners, IDG Capital
+585	FloQast	1.6	2021-07-21 04:00:00	United States	Los Angeles	Financial Services	Polaris Partners, Insight Partners, Norwest Venture Partners
+586	Weka	1.6	2024-05-15 04:00:00	United States	Campbell	Enterprise Tech	Qualcomm Ventures, Hitachi Ventures, MoreTech Ventures
+587	DealShare	1.7	2022-01-27 05:00:00	India	Bengaluru	Consumer & Retail	Alpha Wave Global, Matrix Partners India, Tiger Global Management
+588	Zhubajie	1.61	2015-06-16 04:00:00	China	Chongqing	Enterprise Tech	Cybernaut Growth Fund, IDG Capital
+589	Solaris	1.6	2021-07-13 04:00:00	Germany	Berlin	Financial Services	Yabeo Capital, SBI Investment, Vulcan Capital
+590	Apollo	1.6	2023-08-29 04:00:00	United States	Covina	Enterprise Tech	Nexus Venture Partners, Sequoia Capital, Bain Capital Ventures
+591	DataStax	1.6	2021-05-26 04:00:00	United States	Santa Clara	Enterprise Tech	Crosslink Capital, Meritech Capital Partners, Lightspeed Venture Partners
+592	Infinidat	1.6	2015-04-29 04:00:00	United States	Waltham	Enterprise Tech	TPG Growth, Goldman Sachs
+593	Afiniti	1.6	2017-04-14 04:00:00	Bermuda	Hamilton	Enterprise Tech	GAM Holding
+594	Cao Cao Mobility	1.6	2018-01-17 05:00:00	China	Hangzhou	Industrials	People Electrical Appliance Group China, Zhongrong International Trust
+595	Clari	2.6	2021-03-03 05:00:00	United States	Sunnyvale	Enterprise Tech	Sequoia Capital, Bain Capital Ventures, enaya Capital
+596	Monte Carlo	1.6	2022-05-24 04:00:00	United States	San Francisco	Enterprise Tech	GGV Capital, Accel, Redpoint Ventures
+597	Cresta	1.6	2022-03-17 04:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Greylock Partners, Sequoia Capital
+598	Extend	1.36	2021-05-18 04:00:00	United States	San Francisco	Insurance	GreatPoint Ventures, Meritech Capital Partners, PayPal Ventures
+599	Employment Hero	1.37	2023-10-18 04:00:00	Australia	Sydney	Enterprise Tech	OneVentures, AirTree Ventures, AMP New Ventures
+600	Generate Biomedicines	1.36	2021-11-18 05:00:00	United States	Cambridge	Healthcare & Life Sciences	Altitude Life Science Ventures. T. Rowe Price, Morningside Venture Partners
+601	Lambda Labs	1.5	2023-10-05 04:00:00	United States	San Francisco	Enterprise Tech	1517 Fund, Gradient Ventures, Bloomberg Beta
+602	Cognite	1.5	2021-05-19 04:00:00	Norway	Lysaker	Industrials	Technology Crossover Ventures, Accel, Aker
+603	Altruist	1.5	2024-04-16 04:00:00	United States	Culver City	Financial Services	Venrock, Endeavor, Adams Street Partners
+604	ASAPP	1.6	2021-05-19 04:00:00	United States	New York	Enterprise Tech	March Capital Partners, HOF Capital, Emergence Capital Partners
+605	SmartHR	1.6	2021-06-08 04:00:00	Japan	Tokyo	Enterprise Tech	BEENEXT, World Innovation Lab, Light Street Capital
+606	Mercury	1.6	2021-07-03 04:00:00	United States	San Francisco	Financial Services	Andreessen Horowitz, Coatue Management, Clocktower Technology Ventures
+607	HomeLight	1.7	2021-09-02 04:00:00	United States	San Francisco	Financial Services	Zeev Ventures, Menlo Ventures,Crosslink Capital
+608	ezCater	1.6	2019-04-02 04:00:00	United States	Boston	Consumer & Retail	Insight Venture Partners, ICONIQ Capital, Launchpad Venture Group
+609	Wayflyer	1.6	2022-02-01 05:00:00	Ireland	Dublin	Financial Services	QED Investors, DST Global, Left Lane Capital
+610	Capitolis	1.6	2022-03-22 04:00:00	United States	New York	Financial Services	Sequoia Capital, Index Ventures, S Capital
+611	Magic Eden	1.6	2022-06-21 04:00:00	United States	San Francisco	Media & Entertainment	Sequoia Capital, Lightspeed Venture Partners, Paradigm
+612	Pave	1.6	2022-06-28 04:00:00	United States	San Francisco	Enterprise Tech	Y Combinator, Andreessen Horowitz, Bessemer Venture Partners
+613	Astranis	1.6	2021-04-14 04:00:00	United States	San Francisco	Industrials	Refactor Capital, Andreessen Horowitz, Fifty Years Fund
+614	Promasidor Holdings	1.59	2016-11-08 05:00:00	South Africa	Bryanston	Consumer & Retail	IFC, Ajinomoto
+615	GalaxySpace	1.58	2020-11-17 05:00:00	China	Beijing	Industrials	Shunwei Capital Partners, 5Y Capital, Legend Capital
+616	Icon	1.57	2022-02-18 05:00:00	United States	Austin	Industrials	Moderne Ventures, Oakhouse Partners, Bjarke Ingels Group
+617	Fresh Life Style Supply Chain Management	1.57	2022-03-11 05:00:00	China	Chengdu	Consumer & Retail	Guiyang Venture Capital, Longfor Capital, CAOGENZHIBEN GROUP
+618	Alloy	1.55	2021-09-30 04:00:00	United States	New York	Financial Services	Bessemer Venture Partners, Eniac Ventures, Canapi Ventures
+619	Huntress	1.55	2024-06-18 04:00:00	United States	Ellicott City	Enterprise Tech	ForgePoint Capital, Sapphire Ventures, Gula Tech Adventures
+620	Baiwang	1.55	2019-03-25 04:00:00	China	Beijing	Enterprise Tech	Guozhong Venture Capital Management, Shenzhen Capital Group, Oriental Fortune Capital
+621	Iluvatar CoreX	1.55	2021-03-01 05:00:00	China	Shanghai	Enterprise Tech	Centurium Capital, Cedarlake Capital, Unicom Innovation Venture Capital
+622	Wenheyou	1.55	2021-04-17 04:00:00	China	Hunan	Consumer & Retail	Sequoia Capital China, Warburg Pincus, IDG Capital
+623	Kitopi	1.55	2021-07-01 04:00:00	United Arab Emirates	Dubai	Consumer & Retail	CE-Ventures, BECO Capital, Nordstar
+624	Ximalaya FM	1.52	2017-09-22 04:00:00	China	Shanghai	Media & Entertainment	China Creation Ventures, Sierra Ventures, Xingwang Investment Management
+625	Carzone	1.52	2019-03-01 05:00:00	China	Jiangsu	Industrials	Alibaba Group,Co-Stone Venture Capital, Buhuo Venture Capital
+626	Tabby	1.5	2023-11-01 04:00:00	United Arab Emirates	Dubai	Financial Services	Arbor Ventures, STV, Global Founders Capital
+627	Runway	1.5	2023-05-04 04:00:00	United States	New York	Media & Entertainment	Lux Capital, Compound, Amplify Partners
+628	Skild AI	1.5	2024-07-09 04:00:00	United States	Pittsburgh	Industrials	CRV, General Catalyst, Menlo Ventures
+629	Sigma Computing	1.5	2024-05-16 04:00:00	United States	San Francisco	Enterprise Tech	Sutter Hill Ventures, Snowflake Ventures, NewView Capital
+630	Harvey	1.5	2024-07-23 04:00:00	United States	San Francisco	Enterprise Tech	OpenAI Startup Fund, Kleiner Perkins, Sequoia Capital
+631	OpenWeb	1.5	2021-11-09 05:00:00	United States	New York	Media & Entertainment	Insight Partners, AltaIR Capital, Norma Investments
+632	First Mode	1.5	2022-12-07 05:00:00	United States	Seattle	Industrials	Anglo American
+633	Mu Sigma	1.5	2013-02-07 05:00:00	United States	Northbrook	Enterprise Tech	Sequoia Capital, General Atlantic
+634	Kushki	1.5	2022-06-07 04:00:00	Ecuador	Quito	Financial Services	Clocktower Technology Ventures, DILA Capital, Kaszek Ventures
+635	Jasper	1.5	2022-10-17 04:00:00	United States	Austin	Enterprise Tech	Foundation Capital, Institutional Venture Partners, Founders Capital
+636	Orna Therapeutics	1.5	2022-08-16 04:00:00	United States	Cambridge	Healthcare & Life Sciences	MPM Capital, Astellas Venture Management, F2 Ventures
+637	TuJia	1.5	2015-06-17 04:00:00	China	Beijing	Consumer & Retail	GGV Capital, QiMing Venture Partnersl
+638	Mofang Living	1.5	2016-04-13 04:00:00	China	Shanghai	Consumer & Retail	Warburg Pincus, Aviation Industry Corporation of China
+639	DT Dream	1.5	2017-06-08 04:00:00	China	Hangzhou	Enterprise Tech	Alibaba Group, China Everbright Investment Management, Yinxinggu Capital
+640	Changingedu	1.5	2017-10-30 04:00:00	China	Shanghai	Consumer & Retail	Trustbridge Partners, IDG Capital, Sequoia Capital China
+641	XiaoZhu	1.5	2017-11-01 04:00:00	China	Beijing	Consumer & Retail	Morningside Ventures, Capital Today, JOY Capital
+642	JOLLY Information Technology	1.5	2018-05-29 04:00:00	China	Hangzhou	Consumer & Retail	Legend Capital, CDH Investments, Sequoia Capital China
+643	Yijiupi	1.5	2018-09-20 04:00:00	China	Beijing	Consumer & Retail	Source Code Capital, Meituan Dianping, Tencent Holdings
+644	Cambridge Mobile Telematics	1.5	2018-12-19 05:00:00	United States	Cambridge	Insurance	SoftBank Group
+645	Collective Health	1.5	2019-06-17 04:00:00	United States	San Francisco	Healthcare & Life Sciences	New Enterprise Associates, Founders Fund, Google Ventures
+646	Strava	1.5	2020-11-16 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Jackson Square Ventures, Madrone Capital Partners, Sequoia Capital
+647	Zenoti	1.5	2020-12-15 05:00:00	United States	Bellevue	Consumer & Retail	Norwest Venture Partners, Accel, Tiger Global Management
+648	K Health	1.5	2021-01-19 05:00:00	United States	New York	Healthcare & Life Sciences	Max Ventures, Mangrove Capital Partners, 14W
+649	Uplight	1.5	2021-03-03 05:00:00	United States	Boulder	Industrials	Rubicon Technology Partners, Max Ventures, Inclusive Capital Partners
+650	Snapdocs	1.5	2021-05-25 04:00:00	United States	San Francisco	Financial Services	Sequoia Capital, Y Combinator, F-Prime Capital
+651	Chipper Cash	2	2021-05-31 04:00:00	United States	San Francisco	Financial Services	Deciens Capital, Bezos Expeditions, 500 Startups
+652	Ledger	1.47	2021-06-10 04:00:00	France	Paris	Financial Services	Digital Currency Group, Draper Esprit, Korelya Capital
+653	Next Silicon	1.5	2021-06-14 04:00:00	Israel	Tel Aviv	Enterprise Tech	Amiti Ventures, Playground Global, Aleph
+654	YQNlink	1.5	2021-06-29 04:00:00	China	Shanghai	Industrials	Source Code Capital, Coatue Management, DCM Ventures
+655	impact.com	1.5	2021-07-13 04:00:00	United States	Santa Barbara	Enterprise Tech	Redpoint Ventures, Providence Equity Partners, Silversmith Capital Partners
+656	SmartRecruiters	1.5	2021-07-20 04:00:00	United States	San Francisco	Enterprise Tech	Mayfield Fund, Insight Partners, Rembrandt Venture Partners
+657	NotCo	1.5	2021-07-26 04:00:00	Chile	Santiago	Consumer & Retail	Kaszek Ventures, SOSV, Tiger Global Management
+658	Culture Amp	1.5	2021-07-29 04:00:00	Australia	Richmond	Enterprise Tech	Felicis Ventures, Index Ventures, Blackbird Ventures
+659	TaxBit	1.5	2021-08-04 04:00:00	United States	Draper	Financial Services	Insight Partners, Coinbase Ventures, PayPal Ventures
+660	Pacaso	1.5	2021-03-24 04:00:00	United States	Cincinnati	Financial Services	Global Founders Capital, Shea Ventures, Greycroft
+661	1047 Games	1.5	2021-09-14 04:00:00	United States	Zephyr Cove	Media & Entertainment	VGames, Lakestar, Galaxy Interactive
+662	Matillion	1.5	2021-09-15 04:00:00	United Kingdom	Altrincham	Enterprise Tech	Scale Venture Partners, Sapphire Ventures, Battery Ventures
+663	Persona	1.5	2021-09-15 04:00:00	United States	San Francisco	Enterprise Tech	Coatue Management, Index Ventures, Founders Fund
+664	Ascend Money	1.5	2021-09-27 04:00:00	Thailand	Bangkok	Financial Services	Ant Group, Charoen Pokphand Group, Bow Wave Capital
+665	Andela	1.5	2021-09-29 04:00:00	United States	New York	Enterprise Tech	Spark Capital, Google Ventures, CRE Venture Capital
+666	Built	1.5	2021-09-30 04:00:00	United States	Nashville	Financial Services	Nyca Partners, Index Ventures, Technology Crossover Ventures
+667	CoinList	1.5	2021-10-15 04:00:00	United States	San Francisco	Financial Services	Accomplice, Polychain Capital, GoldenTree Asset Management
+668	Lusha	1.5	2021-11-10 05:00:00	United States	New York	Enterprise Tech	PSG, ION Crossover Partners
+669	cult.fit	1.5	2021-11-10 05:00:00	India	Bengaluru	Healthcare & Life Sciences	Chiratae Ventures, Accel, Kalaari Capital
+670	Olist	1.5	2021-12-15 05:00:00	Brazil	Curitiba	Consumer & Retail	Redpoint e.ventures, Valor Capital Group, SoftBank Latin America Fund
+671	Paradox	1.5	2021-12-27 05:00:00	United States	Scottsdale	Enterprise Tech	Brighton Park Capital, Blue Cloud Ventures, Workday Ventures
+672	Airbyte	1.5	2021-12-17 05:00:00	United States	San Francisco	Enterprise Tech	Accel, Benchmark, SV Angel
+673	StoreDot	1.5	2022-01-04 05:00:00	Israel	Herzliya	Industrials	Samsung Ventures, SingulariTeam, BP Ventures
+674	Spendesk	1.5	2022-01-18 05:00:00	France	Paris	Enterprise Tech	Index Ventures, Eight Roads Ventures, General Atlantic
+675	Veriff	1.5	2022-01-26 05:00:00	Estonia	Tallinn	Enterprise Tech	Accel, Institutional Venture Partners, Tiger Global Management
+676	ElasticRun	1.5	2022-02-07 05:00:00	India	Pune	Industrials	Kalaari Capital, Norwest Venture Partners, Prosus Ventures
+677	Veho	1.5	2021-12-21 05:00:00	United States	Boulder	Consumer & Retail	General Catalyst, Origin Ventures, Fontinalis Partners
+678	Temporal	1.5	2022-02-16 05:00:00	United States	Bellevue	Enterprise Tech	Amplify Partners, Addition, Madrona Venture Group
+679	Fabric	1.5	2022-02-24 05:00:00	United States	Bellevue	Consumer & Retail	Redpoint Ventures, Norwest Venture Partners, Sierra Ventures
+680	Zeta	1.5	2021-05-24 04:00:00	United States	San Francisco	Financial Services	Sodexo Ventures, SoftBank Group
+681	Boba	1.5	2022-04-05 04:00:00	United States	San Francisco	Enterprise Tech	DeFi Technologies, Hypersphere Ventures, M13
+682	Upside	1.5	2022-04-26 04:00:00	United States	DC	Consumer & Retail	Bessemer Venture Partners, Builders VC, General Catalyst
+683	Mashgin	1.5	2022-05-09 04:00:00	United States	Palo Alto	Consumer & Retail	New Enterprise Associates, Matrix Partmers, Susa Ventures
+684	Dock	1.5	2022-05-12 04:00:00	Brazil	Sao Paulo	Financial Services	Viking Global Investors, Riverwood Capital, Lightrock
+685	Prometheus	1.5	2021-09-23 04:00:00	United States	Santa Cruz	Industrials	BMW i Ventures, Metaplanet, Maersk Growth
+686	5ire	1.5	2022-07-15 04:00:00	United Kingdom	London	Enterprise Tech	Global Emerging Markets, Sram & Mram Group, Marshland Capital
+687	Yipin Shengxian	1.49	2019-03-11 04:00:00	China	Hefei	Consumer & Retail	Eastern Bell Capital, Capital Today, Longzhu Capital
+688	Agibank	1.49	2024-12-24 05:00:00	Brazil	Campinas	Financial Services	
+689	Bordrin Motors	1.48	2019-06-03 04:00:00	China	Shanghai	Industrials	China Grand Prosperity Investment, CSC Group
+690	Arcadia	1.48	2022-05-10 04:00:00	United States	DC	Enterprise Tech	BoxGroup, Energy Impact Partners, Camber Creek
+691	VTS	1.47	2019-05-07 04:00:00	United States	New York	Financial Services	Trinity Ventures, Fifth Wall Ventures, OpenView Venture Partners
+692	Shukun Technology	1.46	2021-08-16 04:00:00	China	Beijing	Healthcare & Life Sciences	Marathon Venture Partners, Huagai Capital, China Creation Ventures
+693	Huasun	1.46	2023-01-19 05:00:00	China	Xuancheng	Industrials	Hongtai Capital Holdings, Jintou Zhiyuan
+694	Loft	1.46	2020-01-03 05:00:00	Brazil	Sao Paulo	Financial Services	Monashees+, Andreessen Horowitz, QED Investors
+695	Coocaa	1.45	2018-03-16 04:00:00	China	Shenzhen	Media & Entertainment	Baidu, Tencent Holdings
+696	Placer.ai	1.45	2022-01-12 05:00:00	United States	Los Altos	Consumer & Retail	Fifth Wall Ventures, JBV Capital, Array Ventures
+697	Juma Peisong	1.45	2018-11-26 05:00:00	China	Chengdu	Industrials	Ding Xiang Capital, New Hope Fund, Sino-Ocean Capital
+698	Ouyeel	1.45	2019-06-27 04:00:00	China	Shanghai	Industrials	Taigang Venture Capital
+699	Gymshark	1.45	2020-08-14 04:00:00	United Kingdom	Solihull	Consumer & Retail	General Atlantic
+700	M1	1.45	2021-07-14 04:00:00	United States	Chicago	Financial Services	Left Lane Capital, Clocktower Technology Ventures, Jump Capital
+701	Aleo	1.45	2022-02-07 05:00:00	United States	San Francisco	Enterprise Tech	Slow Ventures, Andreessen Horowitz, SoftBank Group
+702	Einride	1.44	2021-12-31 05:00:00	Sweden	Stockholm	Industrials	Temasek, BUILD Capital Partners, Northzone Ventures
+703	Justworks	1.43	2020-01-28 05:00:00	United States	New York	Enterprise Tech	Index Ventures, Thrive Capital, Bain Capital Ventures
+704	Valgen Medtech	1.43	2021-05-06 04:00:00	China	Hangzhou	Healthcare & Life Sciences	Sequoia Capital China, China Life Investment Holding Company, Qiming Venture Partners
+705	SonderMind	1.42	2021-07-28 04:00:00	United States	Denver	Healthcare & Life Sciences	Kickstart Fund, General Catalyst, Drive Capital
+706	EON	1.4	2024-11-26 05:00:00	United States	New York	Enterprise Tech	Lightspeed Venture Partners, Sequoia Capital, Bond
+707	Route	1.4	2022-01-21 05:00:00	United States	Lehi	Enterprise Tech	Album VC, Madrona Venture Group, Craft Ventures
+708	NIUM	1.4	2021-07-13 04:00:00	Singapore	\N	Financial Services	Vertex Ventures SE Asia, Global Founders Capital, Visa Ventures
+709	Fox Ess	1.4	2023-05-26 04:00:00	China	Wenzhou	Industrials	Sparkedge Capital, Guotai Ruichengde Asset Management
+710	Amagi	1.4	2022-03-16 04:00:00	India	Bengaluru	Media & Entertainment	Mayfield, Accel, Norwest Venture Partners
+711	Liquid Death	1.4	2024-03-11 04:00:00	United States	Santa Monica	Consumer & Retail	Science Media, Live Nation Labs, Velvet Sea Ventures
+712	Papa	1.4	2021-11-04 04:00:00	United States	Miami	Healthcare & Life Sciences	Initialized Capital, Canaan Partners, Sound Ventures
+713	Xpressbees	1.4	2022-02-09 05:00:00	India	Pune	Consumer & Retail	Norwest Venture Partners, Investcorp, Blackstone
+714	Figment	1.4	2021-12-20 05:00:00	Canada	Toronto	Financial Services	Bonfire Ventures, Two Sigma Ventures, FJ Labs
+715	Envoy	1.4	2022-01-11 05:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Initialized Capital, TriplePoint Capital
+716	Deliverect	1.4	2022-01-24 05:00:00	Belgium	Ghent	Consumer & Retail	Newion Partners, SmartFin Capital, OMERS Ventures
+717	SparkCognition	1.4	2022-01-25 05:00:00	United States	Austin	Enterprise Tech	March Capital Partners, Temasek, Doha Venture Capital
+718	Liquidity	1.4	2023-02-20 05:00:00	Israel	Tel Aviv	Financial Services	MUFG Innovation Partners, Spark Capital
+719	Firebolt	1.4	2022-01-26 05:00:00	Israel	Tel Aviv	Enterprise Tech	TLV Partners, Zeev Ventures, Bessemer Venture Partners
+720	AI21 Labs	1.4	2023-08-30 04:00:00	Israel	Tel Aviv	Enterprise Tech	Walden Catalyst Ventures, Pitango Venture Capital, TPY Capital
+721	Koudai	1.4	2014-10-23 04:00:00	China	Beijing	Consumer & Retail	New Enterprise Associates, Tiger Global Management, Tencent
+722	Symphony	1.4	2017-05-16 04:00:00	United States	New York	Financial Services	BNP Paribas, Goldman Sachs, Google
+723	Yidian Zixun	1.4	2017-10-17 04:00:00	China	Beijing	Media & Entertainment	Phoenix New Media, Tianjin Haihe Industry Fund
+724	Cabify	1.4	2018-01-22 05:00:00	Spain	Madrid	Industrials	Seaya Ventures, Otter Rock Capital, Rakuten
+725	Hive Box	1.4	2018-01-23 05:00:00	China	Shenzhen	Consumer & Retail	Eastern Bell Capital, SF Holding Co, STO Express
+726	Away	1.4	2019-05-15 04:00:00	United States	New York	Consumer & Retail	Global Founders Capital, Comcast Ventures, Forerunner Ventures
+727	Kong	2	2020-12-31 05:00:00	United States	San Francisco	Enterprise Tech	New Enterprise Associates, CRV, Index Ventures
+728	Epidemic Sound	1.4	2021-03-11 05:00:00	Sweden	Stockholm	Media & Entertainment	EQT Partners, Blackstone
+729	Yotpo	1.4	2021-03-18 04:00:00	United States	New York	Consumer & Retail	Bessemer Venture Partners, Vintage Investment Partners, Blumberg Capital
+730	Rebel Foods	1.4	2021-10-07 04:00:00	India	Pune	Consumer & Retail	Sequoia Capital India, Lightbox Ventures, Coatue Management
+731	Coda	1.4	2021-07-08 04:00:00	United States	Mountain View	Enterprise Tech	Greylock Partners, General Catalyst, Khosla Ventures
+732	Stash	1.4	2021-02-03 05:00:00	United States	New York	Financial Services	Goodwater Capital, Entree Capital, Valar Ventures
+733	Rad Power Bikes	1.4	2021-10-28 04:00:00	United States	Seattle	Industrials	Durable Capital Partners, Cercano Management, T. Rowe Price
+734	Clarify Health	1.4	2022-04-05 04:00:00	United States	San Francisco	Healthcare & Life Sciences	KKR, Aspenwood Ventures, Spark Capital
+735	Bucketplace	1.4	2022-05-09 04:00:00	South Korea	Seoul	Consumer & Retail	IMM Investment, Mirae Asset Capital, BOND
+736	Paddle	1.4	2022-05-09 04:00:00	United Kingdom	London	Enterprise Tech	Notion Capital, Kindred Capital, BGF Ventures
+737	OneCard	1.4	2022-07-13 04:00:00	India	Pune	Financial Services	Sequoia Capital India, Hummingbird Ventures, Matrix Partners India
+738	boAT	1.4	2022-10-28 04:00:00	India	Mumbai	Consumer & Retail	Qualcomm Ventures, Fireside Ventures
+739	Phenom People	1.4	2021-04-07 04:00:00	United States	Ambler	Enterprise Tech	Sierra Ventures, AXA Venture Partners, Sigma Prime Ventures
+740	GupShup	1.4	2021-04-08 04:00:00	United States	San Francisco	Enterprise Tech	Helion Venture Partners, Tiger Global management, CRV
+741	Degreed	1.4	2021-04-13 04:00:00	United States	Pleasanton	Enterprise Tech	Signal Peak Ventures, Owl Ventures, Jump Capital
+742	Scalable Capital	1.4	2021-06-08 04:00:00	Germany	Munich	Financial Services	BlackRock, Tengelmann Ventures, Holtzbrinck Ventures
+743	VideoAmp	1.4	2021-10-21 04:00:00	United States	Los Angeles	Enterprise Tech	Simon Equity Partners, Wavemaker Partners, Anthem Venture Partners
+744	Panther Labs	1.4	2021-12-02 05:00:00	United States	San Francisco	Enterprise Tech	Innovation Endeavors, s28 Capital, Lightspeed Venture Partners
+745	Salt Security	1.4	2022-02-10 05:00:00	United States	Palo Alto	Enterprise Tech	Y Combinator, S Capital, Tenaya Capital
+746	Tripledot	1.4	2022-02-14 05:00:00	United Kingdom	London	Media & Entertainment	Lightspeed Venture Partners, Access Industries, Eldridge
+747	Nimble Rx	1.4	2022-06-14 04:00:00	United States	Redwood City	Healthcare & Life Sciences	Sequoia Capital, Four Rivers Group, DAG Ventures
+748	Veepee	1.38	2007-07-02 04:00:00	France	La Plaine Saint-Denis	Consumer & Retail	Summit Partners, Qatar Holding
+749	Neon	1.38	2022-02-14 05:00:00	Brazil	Sao Paulo	Financial Services	Propel Venture Partners, Monashees+, BBVA
+750	Movable Ink	1.36	2022-04-28 04:00:00	United States	New York	Enterprise Tech	Contour Venture Partners, Intel Capital, Silver Lake
+751	Patreon	1.35	2020-09-02 04:00:00	United States	San Francisco	Media & Entertainment	Index Ventures, Thrive Capital, CRV
+752	DeepBlue Technology	1.35	2018-04-16 04:00:00	China	Shanghai	Consumer & Retail	DESUN Capital, Yunfeng Capital, Meridian Capital
+753	Klook	1.35	2018-08-07 04:00:00	Hong Kong	Central	Consumer & Retail	Sequoia Capital China, Goldman Sachs, Matrix Partners China
+754	Epirus	1.35	2022-02-14 05:00:00	United States	Hawthorne	Industrials	8VC, Bedrock Capital, Broom Ventures
+755	Signifyd	1.34	2021-04-15 04:00:00	United States	San Jose	Consumer & Retail	Menlo Ventures, Resolute Ventures, IA Ventures
+756	Jaguar Microsystems	1.34	2022-06-23 04:00:00	China	Shenzhen	Industrials	Tencent Holdings, Glory Ventures, Shenzhen Capital Group
+757	Motorway	1.33	2021-11-29 05:00:00	United Kingdom	London	Industrials	Marchmont Ventures, BMW i Ventures, Index Ventures
+758	Human Interest	1.33	2021-08-04 04:00:00	United States	San Francisco	Financial Services	Wing Venture Capital, Slow Ventures, Uncork Capital
+759	RIDI	1.33	2022-01-24 05:00:00	South Korea	Seoul	Media & Entertainment	Atinum Investment, Company K Partners, GIC
+760	Lyten	1.33	2023-09-12 04:00:00	United States	San Jose	Industrials	Honeywell Ventures, Prime Movers Lab, Footprint Coalition Ventures
+761	Flipboard	1.32	2015-07-22 04:00:00	United States	Palo Alto	Media & Entertainment	Kleiner Perkins Caufield & Byers, Comcast Ventures, Insight Partners
+762	GPclub	1.32	2018-10-22 04:00:00	South Korea	Seoul	Consumer & Retail	Goldman Sachs
+763	Tongdun Technology	1.32	2019-04-25 04:00:00	China	Hangzhou	Enterprise Tech	Advantech Capital, Temasek Holdings Ltd., Tiantu Capital Co.
+764	Athletic Greens	1.32	2022-01-25 05:00:00	United States	New York	Healthcare & Life Sciences	SC.Holdings, Not Boring Capital, Bolt Ventures
+765	Unisound	1.31	2018-07-19 04:00:00	China	Beijing	Enterprise Tech	Qiming Venture Partners, China Internet Investment Fund, Qualcomm Ventures
+766	Alzheon	1.31	2020-09-30 04:00:00	United States	Framingham	Healthcare & Life Sciences	ARCH Venture Partners, Ally Bridge Group
+767	MasterControl	1.3	2022-12-15 05:00:00	United States	Salt Lake City	Healthcare & Life Sciences	InnoVentures Capital Partners
+768	24M Technology	1.3	2024-09-05 04:00:00	United States	Cambridge	Industrials	North Bridge Venture Partners, CRV, Shumway Capital
+769	eFishery	1.3	2023-05-25 04:00:00	Indonesia	Bandung	Industrials	Aqua-Spark, Wavemaker Partners, Peak XV Partners
+770	Purplle	1.3	2022-06-09 04:00:00	India	Mumbai	Consumer & Retail	Blume Ventures, JSW Ventures, IvyCap Ventures
+771	Ather Energy	1.3	2024-08-13 04:00:00	India	Bangalore	Industrials	021 Capital
+772	Zum	1.3	2024-01-31 05:00:00	United States	Redwood City	Industrials	Sequoia Capital, BMW i Ventures, Spark Capital
+773	HeartFlow	1.3	2017-12-04 05:00:00	United States	Redwood City	Healthcare & Life Sciences	BlueCross BlueShield Venture Partners, US Venture Partners
+774	Shiprocket	1.21	2022-08-16 04:00:00	India	New Delhi	Consumer & Retail	Bertelsmann India Investments, March Capital Partners, Tribe Capital, Nirvana Venture Advisors
+775	HashKeyHashKey	1.3	2024-01-16 05:00:00	Hong Kong	\N	Financial Services	OKX Ventures
+776	Everly Health	1.3	2020-12-03 05:00:00	United States	Austin	Healthcare & Life Sciences	Highland Capital Partners, Next Coast Ventures, SoGal Ventures
+777	Manner	1.3	2020-12-24 05:00:00	China	Shanghai	Consumer & Retail	Coatue Management, H Capital, Capital Today
+778	DistroKid	1.3	2021-08-16 04:00:00	United States	New York	Media & Entertainment	Insight Partners, Silversmith Capital Partners, Spotify
+779	Konfio	1.3	2021-09-29 04:00:00	Mexico	Mexico City	Financial Services	Kaszek Ventures, QED Investors, International Finance Corporation
+780	Betterment	1.3	2021-09-29 04:00:00	United States	New York	Financial Services	Bessemer Venture Partners, Menlo Ventures, Anthermis
+781	Flock Freight	1.3	2021-10-20 04:00:00	United States	Encinitas	Industrials	SignalFire, GLP Capital Partners, Google Ventures
+782	YugaByte	1.3	2021-10-28 04:00:00	United States	Sunnyvale	Enterprise Tech	Lightspeed Venture Partners, Dell Technologies Capital, Wipro Ventures
+783	Lukka	1.3	2022-01-14 05:00:00	United States	New York	Financial Services	Liberty City Ventures, Soros Fund Management, Summer Capital
+784	TravelPerk	1.3	2022-01-12 05:00:00	Spain	Barcelona	Enterprise Tech	LocalGlobe, Kinnevik, Felix Capital
+785	iTrustCapital	1.3	2022-01-11 05:00:00	United States	Long Beach	Financial Services	Left Lane Capital, Walden Venture Capital
+786	Domestika	1.3	2022-01-27 05:00:00	United States	Berkeley	Media & Entertainment	Zeev Ventures, GSV Ventures
+787	CoinTracker	1.3	2022-01-27 05:00:00	United States	San Francisco	Financial Services	Initialized Capital, General Catalyst, Kraken Ventures
+788	Loadsmart	1.3	2022-02-01 05:00:00	United States	New York	Industrials	Chromo Invest, Maersk Growth, BlackRock
+789	TUNGEE	1.3	2021-12-15 05:00:00	China	Guangzhou	Enterprise Tech	UNITY VENTURES, Qiming Venture Partners, GGV Capital
+790	Yubi	1.5	2022-03-07 05:00:00	India	Chennai	Financial Services	Insight Partners, B Capital Group, Lightspeed Venture Partners
+791	LinkTree	1.3	2022-03-16 04:00:00	Australia	Melbourne	Media & Entertainment	AirTree Ventures, Insight Partners, Index Ventures
+792	Clipboard Health	1.3	2022-02-01 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Caffeinated Capital, Initialized Capital, Y Combinator
+793	Biofourmis	1.3	2022-04-26 04:00:00	United States	Boston	Healthcare & Life Sciences	General Atlantic, CVS Health, MassMutual Ventures
+794	STORD	1.3	2021-09-13 04:00:00	United States	Atlanta	Industrials	Dynamo VC, Susa Ventures, Founders Fund
+795	Optibus	1.3	2022-05-16 04:00:00	Israel	Tel Aviv	Industrials	Bessemer Venture Partners, Insight Partners, Pitango Venture Capital
+796	Keyfactor	1.3	2023-10-24 04:00:00	United States	Independence	Enterprise Tech	GM Ventures, Plymouth Growth Partners, Insight Partners
+797	Equashield	1.3	2022-10-06 04:00:00	United States	Port Washington	Healthcare & Life Sciences	Nordic Capital
+798	Intercom	1.28	2018-03-27 04:00:00	United States	San Francisco	Enterprise Tech	FirstMark Capital, Tiger Global Management
+799	OVO Energy	1.28	2019-02-14 05:00:00	United Kingdom	Bristol	Industrials	Mitsubishi Corporation, Mayfair Equity Partners
+800	Huisuanzhang	1.28	2021-05-24 04:00:00	China	Beijing	Financial Services	IDG Capital, Gaocheng Capital, Chuanrong Capital
+801	WTOIP	1.27	2018-04-08 04:00:00	China	Guangzhou	Enterprise Tech	Dark Horse Technology Group, Hopu Investment Management, Kefa Capital
+802	PeopleCert	1.27	2021-06-23 04:00:00	Greece	Athens	Enterprise Tech	FTV Capital
+803	Greater Bay Technology	1.26	2022-04-02 04:00:00	China	Guangzhou	Industrials	Tencent Holdings, Utrust Venture Capital, GF Xinde Investment Management Co.
+804	JMGO	1.26	2022-03-15 04:00:00	China	Shenzhen	Industrials	IDG Capital, Yuanda Venture Investment, Primitive Forest Holdings Group
+805	Codeium	1.25	2024-08-29 04:00:00	United States	Sacramento	Enterprise Tech	General Catalyst, Kleiner Perkins, Founders Fund
+806	BigID	1.25	2020-12-16 05:00:00	United States	New York	Enterprise Tech	BOLDstart Ventures, SAP.iO Fund, Scale Venture Partners
+807	Polyhedra Network	1.25	2024-03-14 04:00:00	United States	San Francisco	Enterprise Tech	MH Ventures, Symbolic Capital, UOB Venture Management
+808	Kuaikan Manhua	1.25	2017-12-01 05:00:00	China	Beijing	Media & Entertainment	Sequoia Capital China, CMC Capital Partners, Tencent Holdings
+809	Marshmallow	1.25	2021-09-08 04:00:00	United Kingdom	London	Insurance	Passion Capital, Hedosophia, Outrun Ventures
+810	Honor Technology	1.25	2021-10-05 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Andreessen Horowitz, Prosus Ventures, Thrive Capital
+811	Together AI	1.25	2024-03-13 04:00:00	United States	San Francisco	Enterprise Tech	Definition Capital, Long Journey Ventures, Lux Capital
+812	QI Tech	1	2023-10-31 04:00:00	Brazil	Sao Paulo	Financial Services	General Atlantic
+813	Mythical Games	1	2021-11-04 04:00:00	United States	Sherman Oaks	Media & Entertainment	Javelin Venture Partners, Struck Capital, Alumni Ventures Group
+814	Incode Technologies	1.25	2021-12-07 05:00:00	United States	San Francisco	Enterprise Tech	Dila Capital, Framework Ventures, 3L
+815	Tackle.io	1.25	2021-12-21 05:00:00	United States	Boise	Enterprise Tech	Andreessen Horowitz, Bessemer Venture Partners, Coatue Management
+816	Flipdish	1.25	2022-01-13 05:00:00	Ireland	Dublin	Consumer & Retail	Tencent Holdings, Tiger Global Management, Global Founders Capital
+817	CaptivateIQ	1.25	2022-01-26 05:00:00	United States	San Francisco	Enterprise Tech	Sequoia Capital, Y Combinator, Accel
+818	Talos	1.25	2022-05-10 04:00:00	United States	New York	Financial Services	Castle Island Ventures, PayPal Ventures, Andreessen Horowitz
+819	airSlate	1.25	2022-06-16 04:00:00	United States	Brookline	Enterprise Tech	G Squared, UiPath Ventures, General Catalyst
+820	ClassDojo	1.25	2022-07-21 04:00:00	United States	San Francisco	Consumer & Retail	General Catalyst, Unkork Capital, Tencent Holdings
+821	BrewDog	1.24	2017-04-10 04:00:00	United Kingdom	Aberdeen	Consumer & Retail	TSG Consumer Partners, Crowdcube
+822	Enflame	1.24	2021-01-05 05:00:00	China	Shanghai	Enterprise Tech	Tencent Holdings, Delta Capital, Redpoint Ventures China
+823	Shulan Health	1.24	2021-03-01 05:00:00	China	Hangzhou	Healthcare & Life Sciences	Qiming Venture Partners
+824	SeatGeek	1.24	2022-08-31 04:00:00	United States	New York	Media & Entertainment	Accel, Founder Collective, Brainchild Holdings
+825	InDrive	1.23	2021-02-01 05:00:00	United States	Mountain View	Industrials	Leta Capital, Insight Partners, General Catalyst
+826	Spiber	1.22	2021-09-08 04:00:00	Japan	Tsuruoka	Industrials	Cool Japan Fund, JAFCO, The Carlyle Group
+827	Insider	2	2022-02-28 05:00:00	Turkey	Istanbul	Enterprise Tech	Wamda Capital, Endeavor, Riverwood Capital
+828	Kallyope	1.22	2022-02-15 05:00:00	United States	New York	Healthcare & Life Sciences	The Column Group, Alexandria Venture Investments, Lux Capital
+829	Zip	2.2	2022-05-25 04:00:00	United States	San Francisco	Enterprise Tech	CRV, Tiger Global Management, Y Combinator
+830	Cart.com	1.2	2023-06-27 04:00:00	United States	Austin	Consumer & Retail	Mercury Fund, Bearing Ventures, Moonshots Capital
+831	MiniMax AI	1.2	2023-06-01 04:00:00	China	Shanghai	Enterprise Tech	HongShan, IDG Capital
+832	Hailo	1.2	2021-10-12 04:00:00	Israel	Tel Aviv	Enterprise Tech	Glory Ventures, Maniv Mobility
+833	Replit	1.05	2023-04-25 04:00:00	United States	San Francisco	Enterprise Tech	Andreessen Horowitz, Bloomberg Beta, Reach Capital
+834	MoneyView	1.2	2024-09-12 04:00:00	India	Bengaluru	Financial Services	Accel, Nexus Ventures, Nippon Life Global Investors America
+835	Mews	1.2	2024-03-04 05:00:00	Netherlands	Amsterdam	Enterprise Tech	Notion Capital, Revaia, Battery Ventures
+836	Creatio	1.2	2024-06-25 04:00:00	United States	Boston	Enterprise Tech	Sapphire Ventures
+837	Our Next Energy	1.2	2023-02-01 05:00:00	United States	Novi	Industrials	BMW i Ventures, Breakthrough Energy Ventures, Volta Energy Technologies
+838	Castore	1.2	2023-11-29 05:00:00	United Kingdom	Manchester	Consumer & Retail	Felix Capital, Hanaco Ventures, Redrice Ventures
+839	Oyster	1.2	2022-04-20 04:00:00	United States	Wilmington	Enterprise Tech	Emergence Capital, Slack Fund, PayPal Ventures
+840	Yiguo	1.2	2016-11-09 05:00:00	China	Shanghai	Consumer & Retail	Alibaba Group, KKR, Goldman Sachs
+841	Glossier	1.65	2019-03-19 04:00:00	United States	New York	Consumer & Retail	Forerunner Ventures, Institutional Venture Partners, Thrive Capital
+842	Workhuman	1.2	2020-06-23 04:00:00	Ireland	Dublin	Enterprise Tech	ICG
+843	Qumulo	1.2	2020-07-16 04:00:00	United States	Seattle	Enterprise Tech	Madrona Venture Group, Kleiner Perkins Caufield & Byers, Highland Capital Partners
+844	Tealium	1.2	2021-02-03 05:00:00	United States	San Diego	Enterprise Tech	Georgian Partners, Silver Lake, Presidio Ventures
+845	Public	1.2	2021-02-17 05:00:00	United States	New York	Financial Services	Accel, Greycroft, Advancit Capital
+846	Pipa Coding	1.2	2021-03-25 04:00:00	China	Beijing	Consumer & Retail	Source Code Capital, XVC Venture Capital, Hillhouse Capital Management
+847	Pilot	1.2	2021-03-26 04:00:00	United States	San Francisco	Financial Services	Index Ventures, Sequoia Capital, Bezos Expeditions
+848	Aibee	1.2	2021-04-13 04:00:00	China	Beijing	Enterprise Tech	Sequoia Capital China, Lenovo Capital and Incubator, Group GSR Ventures
+849	Vectra Networks	1.2	2021-04-29 04:00:00	United States	San Jose	Enterprise Tech	IA Ventures, Khosla Ventures, AME Cloud Ventures
+850	Ada	1.2	2021-05-07 04:00:00	Canada	Toronto	Enterprise Tech	Version One Ventures, Bessemer Venture Partners, FirstMark Capital
+851	SmartMore	1.2	2021-06-24 04:00:00	China	Shenzhen	Industrials	IDG Capital, ZhenFund, Sequoia Capital China
+852	Rohlik Group	1.2	2021-07-01 04:00:00	Czech Republic	Prague	Consumer & Retail	Partech Partners, Index Ventures, Quadrille Capital
+853	MindTickle	1.2	2021-08-03 04:00:00	United States	San Francisco	Enterprise Tech	Qualcomm Ventures, Accel, Canaan Partners
+854	Offchain Labs	1.2	2021-08-31 04:00:00	United States	Princeton	Enterprise Tech	Pantera Capital, Polychain Capital, Lightspeed Venture Partners
+855	Copado	1.2	2021-09-13 04:00:00	United States	Chicago	Enterprise Tech	Insight Partners, Salesforce Ventures, Perpetual Investors
+856	Gem	1.2	2021-09-28 04:00:00	United States	San Francisco	Enterprise Tech	Accel, Greylock Partners, Meritech Capital Partners
+857	EGYM	1.2	2024-09-24 04:00:00	EGYM	Munich	Healthcare & Life Sciences	Bayern Kapital, NGP Capital, High-Tech Grunderfonds
+858	CarDekho	1.2	2021-10-13 04:00:00	India	Jaipur	Industrials	Sequoia Capital India, Hillhouse Capital Management, Sunley House Capital Management
+859	The Good Glamm Group	1.2	2021-11-10 05:00:00	India	Mumbai	Consumer & Retail	L'Occitane, Trifecta Capital, Bessemer Venture Partners
+860	AgentSync	1.2	2021-12-07 05:00:00	United States	Denver	Insurance	Craft Ventures, Caffeinated Capital, Operator Collective
+861	Pristyn Care	1.4	2021-12-07 05:00:00	India	Gurugram	Healthcare & Life Sciences	Sequoia Capital India, Hummingbird Ventures, Epiq Capital
+862	Merama	1.2	2021-12-09 05:00:00	Mexico	Mexico City	Consumer & Retail	SoftBank Latin America Fund, Advent International, Balderton Capital
+863	SeekOut	1.2	2022-01-12 05:00:00	United States	Bellevue	Enterprise Tech	Mayfield, Madrona Venture Group, Tiger Global Management
+864	BigPanda	1.2	2022-01-12 05:00:00	United States	Mountain View	Enterprise Tech	Advent International, Battery Ventures, Sequoia Capital Israel
+865	Phantom	1.2	2022-01-31 05:00:00	United States	San Francisco	Financial Services	Paradigm, Andreessen Horowitz, Jump Capital
+866	LivSpace	1.2	2022-02-08 05:00:00	India	Bengaluru	Consumer & Retail	Jungle Ventures, Helion Venture Partners, INGKA Investments
+867	Nova Labs	1.2	2022-02-22 05:00:00	United States	San Francisco	Enterprise Tech	FirstMark Capital, Tiger Global Management, FTX Venture
+868	Choco	1.2	2022-04-12 04:00:00	Germany	Berlin	Consumer & Retail	Bessemer Venture Partners, G Squared, Insight Partners
+869	Viz.ai	1.2	2022-04-07 04:00:00	United States	San Francisco	Healthcare & Life Sciences	Kleiner Perkins Caufield & Byers, CRV, Threshold Ventures
+870	Unit	1.2	2022-05-17 04:00:00	United States	New York	Financial Services	Accel, Better Tomorrow Ventures, Flourish Ventures
+871	stori	1.2	2022-07-15 04:00:00	Mexico	Juarez	Financial Services	Vision Plus Capital, Source Code Capital, Lightspeed Venture Partners
+872	Spectrum Medical	1.2	2022-07-18 04:00:00	United Kingdom	Gloucester	Healthcare & Life Sciences	CVC Capital Partners
+873	Swiftly	1.2	2022-09-19 04:00:00	United States	Seattle	Consumer & Retail	Mendacre, BRV Capital Management, Liquid 2 Ventures
+874	CloudBees	1.15	2021-12-09 05:00:00	United States	San Jose	Enterprise Tech	Matrix Partners, Lightspeed Venture Partners, Verizon Ventures
+875	DevRev	1.15	2024-07-25 04:00:00	United States	Palo Alto	Enterprise Tech	Khosla Ventures, Mayfield, Alumni Ventures
+876	Flink	1.07	2021-12-01 05:00:00	Germany	Berlin	Consumer & Retail	Mubadala Capital, Bond, Prosus Ventures
+877	Colossal	1.19	2023-01-31 05:00:00	United States	Austin	Healthcare & Life Sciences	Animal Capital, Breyer Capital, In-Q-Tel
+878	L&P Cosmetic	1.19	2016-01-01 05:00:00	South Korea	Seoul	Consumer & Retail	CDIB Capital
+879	Mininglamp Technology	1.19	2019-03-27 04:00:00	China	Beijing	Enterprise Tech	Russia-China Investment Fund, Tencent Holdings, Sequoia Capital China
+880	Vestiaire Collective	1.18	2021-03-01 05:00:00	France	Paris	Consumer & Retail	Eurazeo, IDInvest Partners, Balderton Capital
+881	Luoji Siwei	1.18	2017-07-20 04:00:00	China	Beijing	Media & Entertainment	Sequoia Capital China, Qiming Venture Partners, Tencent Holdings
+882	Yimidida	1.17	2019-01-14 05:00:00	China	Shanghai	Industrials	Source Code Capital, Global Logistic Properties, K2VC
+883	Modern Health	1.17	2021-02-11 05:00:00	United States	San Francisco	Healthcare & Life Sciences	Kleiner Perkins Caufield & Byers, Afore Capital, Founders Fund
+884	IRL	1.17	2021-06-15 04:00:00	United States	San Francisco	Media & Entertainment	Goodwater Capital, Floodgate, Founders Fund
+885	Younited	1.16	2022-12-08 05:00:00	France	Paris	Financial Services	Weber Investissements, Schibsted Growth
+886	Uzum	1.16	2024-03-26 04:00:00	Uzbekistan	Tashkent	Financial Services	FinSight Ventures
+887	SOURCE Global	1.16	2022-04-29 04:00:00	United States	Scottsdale	Industrials	Breakthrough Energy Ventures, Material Impact, 3x5 Special Opportunity Partners
+888	LifeMiles	1.15	2015-07-13 04:00:00	Colombia	Bogota	Consumer & Retail	Advent International
+889	Guideline	1.15	2021-06-16 04:00:00	United States	San Mateo	Financial Services	Pelion Venture Partners, Foundation Capital, Thoma Bravo
+890	Rebellion Defense	1.15	2021-09-16 04:00:00	United States	Washington DC	Industrials	Venrock, Innovation Endeavors, Insights Partners
+891	Elemy	1.15	2021-10-06 04:00:00	United States	San Francisco	Healthcare & Life Sciences	General Catalyst, Bling Capital, Felicis Ventures
+892	TELD	1.12	2019-12-16 05:00:00	China	Qingdao	Industrials	China Reform Fund, Gaopeng Capital, Jinhui Xingye
+893	Chainguard	1.12	2024-07-25 04:00:00	United States	Kirkland	Enterprise Tech	Amplify Partners, MANTIS Venture Capital, Sequoia Capital
+894	Enable	1.12	2023-11-07 05:00:00	United States	San Francisco	Enterprise Tech	Menlo Ventures, Norwest Venture Partners, Sierra Ventures
+895	DANA	1.13	2022-08-10 04:00:00	Indonesia	Jakarta	Financial Services	Ant Group, Lazada, Sinar Mas Indonesia
+896	At-Bay	1.12	2021-07-27 04:00:00	United States	Mountain View	Insurance	Lightspeed Venture Partners, Khosla Ventures, Munich Re Ventures
+897	Visby Medical	1.12	2022-03-01 05:00:00	United States	San Jose	Healthcare & Life Sciences	Artiman Ventures, Pitango Venture Capital, Valo Ventures
+898	Invoca	1.1	2022-06-14 04:00:00	United States	Santa Barbara	Enterprise Tech	Upfront Ventures, Accel, Industry Ventures
+899	TalkingData	1.1	2021-01-06 05:00:00	China	Beijing	Enterprise Tech	N5 Capital, CR Capital Mgmt, JD Digits
+900	Rapido	1.1	2024-07-29 04:00:00	India	Madhapur	Industrials	Nexus Venture Partners, Astarc Ventures, Shell Ventures
+901	ElevenLabs	1.1	2024-01-22 05:00:00	United States	New York	Enterprise Tech	Andreessen Horowitz, Credo Ventures, Sequoia Capital
+902	Wasabi	1.1	2022-09-27 04:00:00	United States	Boston	Enterprise Tech	Forestay Capital, Alumni Ventures, NTT DoCoMo Ventures
+903	Halan	1	2023-02-01 05:00:00	Egypt	Cairo	Financial Services	Middle East Venture Partners, Endeavor, Algebra Ventures
+904	Rokid	1	2023-11-20 05:00:00	United States	Redwood City	Media & Entertainment	IDG Capital, MFund, Linear Venture
+905	Krutrim	1	2024-01-26 05:00:00	India	Bengaluru	Enterprise Tech	Matrix Partners India
+906	Headway	1	2023-10-05 04:00:00	United States	Orlando	Healthcare & Life Sciences	Accel, Thrive Capital, Andreessen Horowitz
+907	Flexe	1	2022-04-21 04:00:00	United States	Seattle	Industrials	Redpoint Ventures, Prologis Ventures, Madrona Venture Group
+908	TangoMe	1.1	2014-03-20 04:00:00	United States	Mountain View	Media & Entertainment	Draper Fisher Jurtson, Qualcomm Ventures, Alibaba Group
+909	AppDirect	1.1	2015-10-07 04:00:00	United States	San Francisco	Enterprise Tech	Mithril, iNovia Capital, Foundry Group
+910	Juanpi	1.1	2016-04-14 04:00:00	China	Wuhan	Consumer & Retail	Tiantu Capital, SAIF Partners China, Newsion Venture Capital
+911	OVH	1.1	2016-08-15 04:00:00	France	Roubaix	Enterprise Tech	KKR, TowerBrook Capital Partners
+912	GetYourGuide	2	2019-05-16 04:00:00	Germany	Berlin	Consumer & Retail	Spark Capital, Highland Europe, Sunstone Capital
+913	Ivalua	1.1	2019-05-21 04:00:00	United States	Redwood City	Enterprise Tech	Ardian, Tiger Global Management, KKR
+914	Sisense	1.1	2020-01-09 05:00:00	United States	New York	Enterprise Tech	Opus Capital, Genesis Partners, Battery Ventures
+915	Pharmapacks	1.1	2020-11-12 05:00:00	United States	Islandia	Consumer & Retail	The Carlyle Group
+916	Sennder	1.1	2021-01-14 05:00:00	Germany	Berlin	Industrials	Accelm Scania Growth Capital, Lakestar
+917	Nexthink	1.1	2021-02-08 05:00:00	Switzerland	Prilly	Enterprise Tech	Auriga, Galeo Ventures, Highland Europe
+918	Zego	1.1	2021-03-09 05:00:00	United Kingdom	London	Insurance	LocalGlobe, Balderton Capital, Target Global
+919	Rightway	1.1	2021-03-30 04:00:00	United States	New York	Healthcare & Life Sciences	Thrive Capital, Khosla Ventures, Tiger Global Management
+920	Sunbit	1.1	2021-05-20 04:00:00	United States	Los Angeles	Financial Services	Zeev Ventures, Group11, Chicago Ventures
+921	Qingting FM	1.1	2021-06-02 04:00:00	China	Shanghai	Media & Entertainment	China Culture Industrial Investment Fund, We Capital, China Minsheng Investment Group
+922	G2	1.1	2021-06-22 04:00:00	United States	Chicago	Enterprise Tech	Pritzker Group Venture Capital, Accel, Hyde Park Venture Partners
+923	Caribou	1.1	2022-05-23 04:00:00	United States	Denver	Insurance	CMFG Ventures, Accomplice, Moderne Ventures
+924	Nowports	1.1	2022-05-24 04:00:00	Mexico	Monterrey	Industrials	Monashees+, Foundation Capital, Base10 Partners
+925	People.ai	1.1	2021-08-11 04:00:00	United States	San Francisco	Enterprise Tech	GGV Capital, Lightspeed Venture Partners, ICONIQ Capital
+926	Carousell	1.1	2021-09-15 04:00:00	Singapore	\N	Consumer & Retail	500 Global, Rakuten Ventures, Golden Gate Ventures
+927	apna	1.1	2021-09-15 04:00:00	India	Bengaluru	Enterprise Tech	Sequoia Capital India, Rocketship.vc, Lightspeed India Partners
+928	Karat	1.1	2021-10-13 04:00:00	United States	Seattle	Enterprise Tech	8VC, Norwest Venture Partners, Tiger Global Management
+929	Enpal	1.1	2021-10-18 04:00:00	Germany	Berlin	Industrials	HV Capital, Softbank Group, BlackRock
+930	Acko General Insurance	1.1	2021-10-28 04:00:00	India	Bengaluru	Insurance	Intact Ventures, Munich Re Ventures, General Atlantic
+931	Daily Harvest	1.1	2021-11-16 05:00:00	United States	New York	Consumer & Retail	M13, Lightspeed Venture Partners, Lone Pine Capital
+932	The Bank of London	1.1	2021-11-30 05:00:00	United Kingdom	London	Financial Services	Mangrove Capital Partners,14W. ForgeLight
+933	Fundbox	1.1	2021-11-30 05:00:00	United States	San Francisco	Financial Services	Khosla Ventures, General Catalyst, Blumberg Capital
+934	Turing	1.1	2021-12-20 05:00:00	United States	Palo Alto	Enterprise Tech	Foundation Capital, Frontier Ventures, AltaIR Capital
+935	GlobalBees	1.1	2021-12-28 05:00:00	India	New Delhi	Consumer & Retail	Chiratae Ventures, SoftBank Group, Trifecta Capital
+936	LEAD	1.1	2022-01-13 05:00:00	India	Andheri	Consumer & Retail	WestBridge Capital, GSV Ventures, Elevar Equity
+937	eSentire	1.1	2022-02-22 05:00:00	Canada	Waterloo	Enterprise Tech	Edison Partners, Georgian Partners, VentureLink
+938	Beyond Identity	1.1	2022-02-22 05:00:00	United States	New York	Enterprise Tech	New Enterprise Associates, Koch Disruptive Technologies, Evolution Equity Partners
+939	Staffbase	1.1	2022-03-15 04:00:00	Germany	Chemnitz	Enterprise Tech	Insight Partners, e.ventures, General Atlantic
+940	Chief	1.1	2022-03-31 04:00:00	United States	New York	Consumer & Retail	General Catalyst, Inspired Capital, Flybridge Capital Partners
+941	IntelyCare	1.1	2022-04-06 04:00:00	United States	Quincy	Healthcare & Life Sciences	Kaiser Permanente Ventures, Endeavour Vision, LRVHealth
+942	Teleport	1.1	2022-05-03 04:00:00	United States	Oakland	Enterprise Tech	Kleiner Perkins Caufield & Byers, s28 Capital, Insight Partners
+943	Imply Data	1.1	2022-05-17 04:00:00	United States	Burlingame	Enterprise Tech	Andreessen Horowitz, Bessemer Venture Partners, Khosla Ventures,
+944	Material Security	1.1	2022-05-11 04:00:00	United States	Redwood City	Enterprise Tech	Andreessen Horowitz, Founders Fund
+945	Recover	1.1	2022-06-09 04:00:00	Spain	Banyeres de Mariola	Industrials	Goldman Sachs Asset Management, STORY3 Capital Partners
+946	CAIS	1.1	2022-01-11 05:00:00	United States	New York	Financial Services	Franklin Templeton, Motive Partners. Apollo Global Management
+947	Nxin	1.08	2018-09-18 04:00:00	China	Beijing	Industrials	Beijing Juneng Hesheng Industry Investment Fund, Beijing Shuju Xinrong Fund
+948	UISEE Technology	1.08	2021-01-25 05:00:00	China	Beijing	Industrials	Shenzhen Capital Group, Robert Bosch Venture Capital, SeptWolves Ventures
+949	56PINGTAI	1.08	2021-01-25 05:00:00	China	Shanghai	Industrials	QF Capital, QC Capital, Unicom Innovation Venture Capital
+950	Cirkul	1.07	2022-06-13 04:00:00	United States	Sarasota	Consumer & Retail	AF Ventures, Siddhi Capital, SC.Holdings
+951	Radius Payment Solutions	1.07	2017-11-27 05:00:00	United Kingdom	Crewe	Industrials	Inflexion Private Equity
+952	InCred	1.05	2023-11-09 05:00:00	India	Mumbai	Financial Services	
+953	0x	1.05	2022-04-26 04:00:00	United States	San Francisco	Financial Services	Jump Capital, Pantera Capital, Greylock Partners
+954	Jiuxian	1.05	2015-07-30 04:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, Rich Land Capital, Merrysunny Wealth
+955	Instabase	2	2019-10-21 04:00:00	United States	San Francisco	Enterprise Tech	New Enterprise Associates, Greylock Partners, Andreessen Horowitz
+956	Sendbird	1.05	2021-04-06 04:00:00	United States	San Mateo	Enterprise Tech	FundersClub, Y Combinator, Tiger Global Management
+957	Density	1.05	2021-11-10 05:00:00	United States	San Francisco	Enterprise Tech	Founders Fund, Upfront Ventures, 01 Advisors
+958	Mixpanel	1.05	2021-11-15 05:00:00	United States	San Francisco	Enterprise Tech	Bain Capital Tech Opportunities, Andreessen Horowitz, Sequoia Capital
+959	Branch	1.05	2022-03-01 05:00:00	United States	Columbus	Insurance	American Family Ventures, Greycroft, SignalFire
+960	OrCam Technologies	1.03	2018-02-20 05:00:00	Israel	Jerusalem	Healthcare & Life Sciences	Intel Capital, Aviv Venture Capital
+961	B&C Chemical	1.02	2023-04-19 04:00:00	China	Pizhou	Industrials	Suzhou International Development Venture Capital Holding, GP Capital
+962	Ample	1.02	2021-11-11 05:00:00	United States	San Francisco	Industrials	Shell Ventures, Blackstone, Moore Strategic Ventures
+963	Wheel	1.01	2022-01-19 05:00:00	United States	Austin	Healthcare & Life Sciences	Silverton Partners, Tusk Ventures, CRV
+964	EvenUp	1	2024-10-08 04:00:00	United States	San Francisco	Enterprise Tech	NFX, Lightspeed Venture Partners, Bessemer Venture Partners
+965	Kiteworks	1	2024-08-14 04:00:00	United States	Palo Alto	Enterprise Tech	
+966	Ayar Labs	1	2024-12-11 05:00:00	United States	San Jose	Industrials	Intel Capital, Founders Fund, Playground Global
+967	Rentberry	1	2024-09-06 04:00:00	United States	San Francisco	Financial Services	369 Growth Partners, GTM Capital, Berkeley Hills Capital
+968	Vestwell	1	2023-12-21 05:00:00	United States	New York	Financial Services	Fin Capital, Primary Venture Partners, Lightspeed Venture Partners
+969	Lighthouse	1	2024-11-24 05:00:00	United Kingdom	London	Enterprise Tech	F-Prime Capital, Eight Roads Ventures
+970	Moniepoint	1	2024-10-29 04:00:00	Nigeria	Lagos	Financial Services	Lightrock, Novastar Ventures, QED Investors
+971	Speak	1	2024-12-10 05:00:00	United States	San Francisco	Enterprise Tech	Khosla Ventures, OpenAI Startup Fund, Founders Fund
+972	Flo Health	1	2024-07-30 04:00:00	United Kingdom	London	Healthcare & Life Sciences	Flint Capital, Target Global, Vostok New Ventures
+973	Nimble	1	2024-10-23 04:00:00	United States	San Francisco	Industrials	GSR Ventures, Breyer Capital, Accel
+974	Halcyon	1	2024-11-25 05:00:00	United States	Austin	Enterprise Tech	Bain Capital Ventures, SYN Ventures, Evolution Equity Partners
+975	VectorBuilder	1	2022-10-10 04:00:00	United States	Chicago	Healthcare & Life Sciences	Legend Capital
+976	EliseAI	1	2024-08-14 04:00:00	United States	New York	Enterprise Tech	Navitas Capital, Point72 Ventures, JLL Spark
+977	The Row	1	2024-09-12 04:00:00	United States	New York	Consumer & Retail	
+978	Cosm	1	2024-07-31 04:00:00	United States	Los Angeles	Media & Entertainment	Bolt Ventures
+979	The Sandbox	1	2024-06-06 04:00:00	Malta	St. Julians	Media & Entertainment	LG Technology Ventures, True Global Ventures, 1kx
+980	Minute Media	1	2024-01-30 05:00:00	United States	New York	Media & Entertainment	Dawn Capital, Battery Ventures, Gemini Israel Ventures
+981	World Labs	1	2024-07-17 04:00:00	United States	Stanford	Enterprise Tech	Andreessen Horowitz, Radical Ventures, New Enterprise Associates
+982	Merkle Manufactory	1	2024-03-30 04:00:00	United States	Los Angeles	Media & Entertainment	Standard Crypto, Andreessen Horowitz, Union Square Ventures
+983	Perfios	1	2024-03-13 04:00:00	India	Mumbai	Financial Services	Bessemer Venture Partners, Teachers' Venture Growth
+984	Saronic Technologies	1	2024-07-19 04:00:00	United States	Austin	Industrials	8VC, Caffeinated Capital, Andreessen Horowitz
+985	Sakana AI	1	2024-06-26 04:00:00	Japan	Tokyo	Enterprise Tech	Lux Capital, Khosla Ventures, New Enterprise Associates
+986	Tamara	1	2023-12-18 05:00:00	Saudi Arabia	Riyadh	Financial Services	
+987	Aven	1	2024-07-17 04:00:00	United States	San Fransisco	Financial Services	Khosla Ventures, General Catalyst, Founders Fund
+988	Semperis	1	2024-06-20 04:00:00	United States	Hoboken	Enterprise Tech	Tech Pioneers Fund, Ten Eleven Ventures, Hudson Ventures
+989	Xreal	1	2024-01-29 05:00:00	China	Beijing	Media & Entertainment	Hongtai Capital Holdings, Shunwei Capital, GP Capital
+990	Silverfort	1	2024-01-23 05:00:00	Israel	Tel Aviv	Enterprise Tech	SingTel Innov8, Citi Ventures, Maor Investments
+991	Pigment	1	2024-04-03 04:00:00	France	Paris	Enterprise Tech	FirstMark Capital, Meritech Capital Partners, Institutional Venture Partners
+992	Huma	1	2024-07-16 04:00:00	United Kingdom	London	Healthcare & Life Sciences	Leaps by Bayer, Hitachi Ventures, Unilever Ventures
+993	IntraBio	1	2024-03-23 04:00:00	United Kingdom	Oxfordshire	Healthcare & Life Sciences	
+994	Andalusia Labs	1	2023-12-13 05:00:00	United Arab Emirates	Abu Dhabi	Enterprise Tech	Framework Ventures, Bain Capital Ventures, Dale Ventures
+995	EmployerDirect Healthcare	1	2023-12-19 05:00:00	United States	Dallas	Healthcare & Life Sciences	Insight Partners, Texo Ventures
+996	Electric Hydrogen	1	2023-10-03 04:00:00	United States	Natick	Industrials	Prelude Ventures, Breakthrough Energy Ventures, Fifth Wall
+997	TechMet	1	2023-12-07 05:00:00	Ireland	Dublin	Industrials	S2G Ventures, Dale Ventures
+998	Altana AI	1	2024-07-29 04:00:00	United States	New York	Enterprise Tech	Google Ventures, Amadeus Capital Partners, Activate Capital
+999	MaintainX	1	2023-12-06 05:00:00	United States	San Fransisco	Enterprise Tech	August Capital, Ridge Ventures, Amity Ventures
+1000	01.AI	1	2023-11-05 04:00:00	China	Beijing	Enterprise Tech	
+1001	MindMaze	1	2022-02-17 05:00:00	Switzerland	Lausanne	Health	Hambro Perks
+1002	Avenue One	1	2023-05-15 04:00:00	United States	New York	Financial Services	
+1003	DataSnipper	1	2024-02-01 05:00:00	Netherlands	Amsterdam	Enterprise Tech	Index Ventures
+1004	Flashbots	1	2023-07-21 04:00:00	Cayman Islands	Grand Cayman	Enterprise Tech	Paradigm, Fabric Ventures
+1005	Typeface	1	2023-06-29 04:00:00	United States	Los Altos	Enterprise Tech	Google Ventures, Salesforce Ventures, Menlo Ventures
+1006	Imbue	1	2023-09-07 04:00:00	United States	San Francisco	Enterprise Tech	
+1007	Restaurant365	1	2023-05-19 04:00:00	United States	Irvine	Consumer & Retail	Bessemer Venture Partners
+1008	Kin	1	2023-09-13 04:00:00	United States	Chicago	Insurance	QED Investors, Commerce Ventures, Alpha Edison
+1009	KoBold Metals	1	2023-06-20 04:00:00	United States	Berkeley	Industrials	Andreessen Horowitz, Breakthrough Energy Ventures, Apollo Projects
+1010	Go	1	2023-05-24 04:00:00	Japan	Tokyo	Industrials	Mirai Creation Fund
+1011	Percent	1	2018-11-30 05:00:00	China	Beijing	Enterprise Tech	IDG Capital
+1012	1Komma5	1.08	2023-06-23 04:00:00	Germany	Hamburg	Industrials	Porsche Ventures, G2VP, b2venture
+1013	Gradiant	1	2023-05-17 04:00:00	United States	Woburn	Industrials	Safar Partners, WAVE Equity Partners, Cranberry Capital
+1014	Palmetto	1	2022-02-24 05:00:00	United States	Charleston	Industrials	Greycroft, Lerer Hippeau, ArcTern Ventures
+1015	Humanity Protocol	1	2024-02-28 05:00:00	Hong Kong	\N	Financial Services	Shima Capital, CMCC Global, MH Ventures
+1016	Prove Identity	1	2020-06-18 04:00:00	United States	New York	Enterprise Tech	Opus Capital, RRE Ventures, Relay Ventures
+1017	Character.AI	1	2023-03-03 05:00:00	United States	Menlo Park	Media & Entertainment	Andreessen Horowitz
+1018	Atmosphere	1	2023-02-07 05:00:00	United States	Austin	Media & Entertainment	S3 Ventures
+1019	Adept	1	2023-03-14 04:00:00	United States	San Francisco	Enterprise Tech	Greylock Partners, Addition, M12
+1020	Beamery	1	2022-12-13 05:00:00	United Kingdom	London	Enterprise Tech	Index Ventures, EQT Ventures, Workday Ventures
+1021	Flow	1	2022-08-15 04:00:00	United States	New York	Financial Services	Andreessen Horowitz
+1022	Xanadu	1	2022-11-09 05:00:00	Canada	Toronto	Enterprise Tech	BDC Capital, Georgian, Bessemer Venture Partners
+1023	LINE MAN Wongnai	1	2022-09-26 04:00:00	Thailand	Bangkok	Consumer & Retail	BRV Capital Management, Bualuang Ventures
+1024	Celestia	1	2022-10-19 04:00:00	Liechtenstein	Vaduz	Enterprise Tech	Placeholder Capital, Coinbase Ventures, Binance Ventures
+1025	Stability AI	1	2022-10-05 04:00:00	United Kingdom	London	Enterprise Tech	Lightspeed Venture Partners, Coatue Management
+1026	Satispay	1	2022-09-28 04:00:00	Italy	Milan	Financial Services	Lightrock, Greyhound Capital, Endeavor
+1027	Paystand	1	2022-08-02 04:00:00	United States	Scotts Valley	Financial Services	BlueRun Ventures, LEAP Global Partners, Cervin Ventures
+1028	Turntide Technologies	1	2022-06-15 04:00:00	United States	Sunnyvale	Industrials	Meson Capital Partners, Fifth Wall Ventures, OGCI Climate Investments
+1029	EcoVadis	1	2022-06-14 04:00:00	France	Paris	Enterprise Tech	Astorg Partners, Princeville Global, Beyond Net Zero
+1030	TransferMate	1	2022-05-22 04:00:00	Ireland	Kilkenny	Financial Services	Railway Pension Trustee Co. Ltd.
+1031	Lookout	1	2013-10-10 04:00:00	United States	San Francisco	Enterprise Tech	Accel Partners, Greylock Partners, Lowercase Capital
+1032	Snapdeal	1	2014-05-21 04:00:00	India	New Delhi	Consumer & Retail	SoftBankGroup, Blackrock, Alibaba Group
+1033	TechStyle Fashion Group	1	2014-08-29 04:00:00	United States	El Segundo	Consumer & Retail	Matrix Partners, Passport Capital, Rho Ventures
+1034	Zebec	1	2022-08-29 04:00:00	United States	San Francisco	Financial Services	Resolute Ventures, Shima Capital, Circle Ventures
+1035	InMobi	1	2014-12-02 05:00:00	India	Bengaluru	Enterprise Tech	Kleiner Perkins Caufield & Byers, Softbank Corp., Sherpalo Ventures
+1036	LinkSure Network	1	2015-01-01 05:00:00	China	Shanghai	Industrials	N/A
+1037	Red Ventures	1	2015-01-07 05:00:00	United States	Fort Mill	Media & Entertainment	Silver Lake Partners, General Atlantic
+1038	BeiBei	1	2015-01-22 05:00:00	China	Hangzhou	Consumer & Retail	Banyan Capital, New Horizon Capital, IDG Capital Partners
+1039	Lamabang	1	2015-03-06 05:00:00	China	Shenzhen	Consumer & Retail	5Y Capital, Matrix Partners China, K2VC
+1040	Jimu	1	2015-04-21 04:00:00	China	Beijing	Financial Services	Matrix Partners China, Ventech China, Shunwei Capital Partners
+1041	ShareCRM	1	2015-07-02 04:00:00	China	Beijing	Enterprise Tech	IDG Capital, Northern Light Venture Capital, DCM Ventures
+1042	Mia.com	1	2015-09-08 04:00:00	China	Beijing	Consumer & Retail	Sequoia Capital China, ZhenFund, K2 Ventures
+1043	58 Daojia	1	2015-10-12 04:00:00	China	Beijing	Consumer & Retail	KKR, Alibaba Group, Ping An Insurance
+1044	Womai	1	2015-10-12 04:00:00	China	Beijing	Consumer & Retail	SAIF Partners China, Baidu, IDG Capital
+1045	HuJiang	1	2015-10-29 04:00:00	China	Shanghai	Consumer & Retail	China Minsheng Investment, Baidu, Wanxin Media
+1046	iTutorGroup	1	2015-11-18 05:00:00	China	Shanghai	Consumer & Retail	QiMing Venture Partners, Temasek Holdings, Silverlink Capital
+1047	iCarbonX	1	2016-04-12 04:00:00	China	Shenzhen	Healthcare & Life Sciences	Tencent, Vcanbio
+1048	Kendra Scott	1	2016-12-21 05:00:00	United States	Austin	Consumer & Retail	Berkshire Partners, Norwest Venture Partners
+1049	Zhuan Zhuan	1	2017-04-18 04:00:00	China	Beijing	Consumer & Retail	58.com, Tencent Holdings
+1050	Modernizing Medicine	1	2017-05-10 04:00:00	United States	Boca Raton	Healthcare & Life Sciences	Warburg Pincus, Summit Partners, Sands Capital
+1051	DianRong	1	2017-08-02 04:00:00	China	Shanghai	Financial Services	Standard Chartered, FinSight Ventures, Affirma Capital
+1052	YH Global	1	2017-09-21 04:00:00	China	Shenzhen	Industrials	Co-Energy Finance, Grandland
+1053	Revolution Precrafted	1	2017-10-23 04:00:00	Philippines	Manila	Industrials	K2 Global, 500 Startups
+1054	WeLab	1	2017-11-08 05:00:00	Hong Kong	\N	Financial Services	Sequoia Capital China, ING, Alibaba Entrepreneurs Fund
+1055	Maimai	1	2017-11-15 05:00:00	China	Beijing	Media & Entertainment	Morningside Venture Capital, IDG Capital, DCM Ventures
+1056	Dxy.cn	1	2018-04-10 04:00:00	China	Hangzhou	Healthcare & Life Sciences	Tencent Holdings, DCM Ventures
+1057	HMD Global	1	2018-05-21 04:00:00	Finland	Espoo	Industrials	Ginko Ventures
+1058	Huike Group	1	2018-05-24 04:00:00	China	Beijing	Enterprise Tech	Fosun RZ Capital, Oceanwide Holdings, Shenzhen Qianhe Capital Management Co.
+1059	ChinaC.com	1	2018-06-11 04:00:00	China	Wuxi	Enterprise Tech	V Star Capital, GF Xinde Investment Management Co., Haitong Leading Capital Management
+1060	LinkDoc Technology	1	2018-07-05 04:00:00	China	Beijing	Healthcare & Life Sciences	China Investment Corporation, New Enterprise Associates
+1061	Movile	1	2018-07-12 04:00:00	Brazil	Sao Paulo	Consumer & Retail	Innova Capital - FIP, 3G Capital Management, Prosus Ventures
+1062	Pat McGrath Labs	1	2018-07-16 04:00:00	United States	New York	Consumer & Retail	One Luxury Group, Eurazeo
+1063	Wacai	1	2018-07-18 04:00:00	China	Hangzhou	Financial Services	Qiming Venture Partners, China Broadband Capital, CDH Investments
+1064	FlashEx	1	2018-08-27 04:00:00	China	Beijing	Industrials	Prometheus Capital, Matrix Partners China, JD Capital Management
+1065	Banma Network Technologies	1	2018-09-13 04:00:00	China	Shanghai	Industrials	Yunfeng Capital, SDIC Innovation Investment Management, Shang Qi Capital
+1066	Tresata	1	2018-10-10 04:00:00	United States	Charlotte	Financial Services	GCP Capital Partners
+1067	Momenta	1	2018-10-17 04:00:00	China	Beijing	Industrials	Sinovation Ventures, Tencent Holdings, Sequoia Capital China
+1068	Hosjoy	1	2018-10-18 04:00:00	China	Nanjing	Consumer & Retail	U.S.-China Green Fund, Founder H Fund, Richland Equities
+1069	Omio	1	2018-10-23 04:00:00	Germany	Berlin	Consumer & Retail	Lakestar, Battery Ventures, New Enterprise Associates
+1070	BitFury	1	2018-11-06 05:00:00	Netherlands	Amsterdam	Enterprise Tech	Georgian Co-Investment Fund, iTech Capital, Galaxy Digital
+1071	REEF Technology	1	2018-12-10 05:00:00	United States	Miami	Industrials	Target Global, UBS Asset Management, Mubadala Capital
+1072	Globality	1	2019-01-22 05:00:00	United States	Menlo Park	Enterprise Tech	SoftBank Group
+1073	Ynsect	1	2019-02-21 05:00:00	France	Evry	Industrials	Astanor Ventures, Upfront Ventures, IDInvest Partners
+1074	Poizon	1	2019-04-29 04:00:00	China	Shanghai	Consumer & Retail	DST Global, Sequoia Capital China, Gaorong Capital
+1075	SITECH DEV	1	2019-05-16 04:00:00	China	Guiyang	Industrials	China Prosperity Capital
+1076	KnowBox	1	2019-05-30 04:00:00	China	Beijing	Consumer & Retail	TAL Education Group, Legend Star, Alibaba Group
+1077	Meero	1	2019-06-18 04:00:00	France	Paris	Media & Entertainment	Aglae Ventures, Global Founders Capital, Alven Capital
+1078	C2FO	1	2019-08-07 04:00:00	United States	Leawood	Financial Services	Union Square Ventures, Summerhill Venture Partners, Mithril Capital Management
+1079	Numbrs	1	2019-08-22 04:00:00	Switzerland	Zurich	Financial Services	Investment Corporation of Dubai, Centralway
+1080	EBANX	1	2019-10-16 04:00:00	Brazil	Curitiba	Financial Services	FTV Capital, Endeavor
+1081	KK Group	3	2019-10-23 04:00:00	China	Dongguan	Consumer & Retail	Matrix Partners China, Bright Venture Capita, Shenzhen Capital Group
+1082	Hotmart	1	2020-03-17 04:00:00	Netherlands	Amsterdam	Consumer & Retail	Technology Crossover Ventures, Alkeon Capital Management, General Atlantic
+1083	Dubizzle Group	1	2020-04-28 04:00:00	United Arab Emirates	Dubai	Consumer & Retail	OLX Group, KCK Group, EXOR Seeds
+1084	Quizlet	1	2020-05-13 04:00:00	United States	San Francisco	Consumer & Retail	Union Square Ventures, Altos Ventures, Costanoa Ventures
+1085	Orca Bio	1	2020-06-17 04:00:00	United States	Menlo Park	Healthcare & Life Sciences	Lightspeed Venture Partners, Data Collective, 8VC
+1086	Infobip	1	2020-07-30 04:00:00	Croatia	Vodnjan	Enterprise Tech	One Equity Partners
+1087	Zwift	1	2020-09-16 04:00:00	United States	Long Beach	Healthcare & Life Sciences	Novator Partners, True, Causeway Media Partners
+1088	Playco	1	2020-09-21 04:00:00	Japan	Tokyo	Media & Entertainment	Sozo Ventures, Caffeinated Capital, Sequoia Capital
+1089	Gousto	1.7	2020-11-03 05:00:00	United Kingdom	London	Consumer & Retail	MMC Ventures, BGF Ventures, Unilever Ventures
+1090	Alation	1.7	2021-06-03 04:00:00	United States	Redwood City	Enterprise Tech	Costanoa Ventures, Data Collective, Salesforce Ventures
+1091	Boom Supersonic	1	2020-12-16 05:00:00	United States	Englewood	Industrials	WRVI Capital, Caffeinated Capital, Y Combinator
+1092	Quantum Metric	1	2021-01-07 05:00:00	United States	Colorado Springs	Enterprise Tech	Insight Partners, Bain Capital Ventures
+1093	News Break	1	2021-01-07 05:00:00	United States	Mountain View	Media & Entertainment	IDG Capital, Francisco Partners, ZhenFund
+1094	MadeiraMadeira	1	2021-01-07 05:00:00	Brazil	Parana	Consumer & Retail	Flybridge Capital Partners, SoftBank Group, Monashees+
+1095	PPRO	1	2021-01-19 05:00:00	United Kingdom	London	Financial Services	Wellington Management, Eurazeo, Citi Ventures
+1096	Splashtop	1	2021-01-27 05:00:00	United States	San Jose	Enterprise Tech	Storm Ventures, DFJ DragonFund, New Enterprise Associates
+1097	Flash Express	1	2021-02-01 05:00:00	Thailand	Bangkok	Industrials	SCB 10X, Krungsri Finnovate, eWTP Capital
+1098	Axiom Space	1	2021-02-16 05:00:00	United States	Houston	Industrials	C5 Capital, Hemisphere Ventures, The Venture Collective
+1099	Locus Robotics	1	2021-02-17 05:00:00	United States	Wilmington	Industrials	Scale Venture Partners, Bond, Tiger Global Management
+1100	Standard AI	1	2021-02-17 05:00:00	United States	San Francisco	Consumer & Retail	CRV, Y Combinator, Initialized Capital
+1101	Newsela	1	2021-02-25 05:00:00	United States	New York	Consumer & Retail	Owl Ventures, Technology Crossover Ventures, Tao Capital Partners
+1102	Aqua Security	1	2021-03-10 05:00:00	Israel	Ramat Gan	Enterprise Tech	TLV Partners, Lightspeed Venture Partners, M12
+1103	PatSnap	1	2021-03-16 04:00:00	Singapore	\N	Enterprise Tech	Sequoia Capital China, Shunwei Capital Partners, Qualgro
+1104	Evidation	1	2021-03-22 04:00:00	United States	San Mateo	Healthcare & Life Sciences	B Capital Group,, GE Ventures, McKesson Ventures
+1105	Sidecar Health	1	2021-01-26 05:00:00	United States	El Segundo	Healthcare & Life Sciences	GreatPoint Ventures, Tiger Global Management, Menlo Ventures
+1106	Feedzai	1	2021-03-24 04:00:00	United States	San Mateo	Financial Services	Global Founders Capital, Shea Ventures, Greycroft
+1107	Cameo	1	2021-03-30 04:00:00	United States	Chicago	Media & Entertainment	Lightspeed Venture Partners, Kleiner Perkins Caufield & Byers, Origin Ventures
+1108	Hyperchain	1	2021-04-11 04:00:00	China	Hangzhou	Enterprise Tech	Yinhong Equity Investment Fund, E Fund, Ideal International
+1109	The Zebra	1	2021-04-12 04:00:00	United States	Austin	Insurance	Silverton Partners, Accel, Ballast Point Ventures
+1110	Fiture	1	2021-04-14 04:00:00	China	Chengdu	Healthcare & Life Sciences	Bertelsmann Asia Investments, Sequoia Capital China, NIO Capital
+1111	Injective	1	2021-04-20 04:00:00	United States	New York	Financial Services	Pantera Capital, Cadenza Ventures, BlockTower Capital
+1112	Sift	1	2021-04-22 04:00:00	United States	San Francisco	Enterprise Tech	Union Square Ventures, Insight Partners, Spark Capital
+1113	Teya	1	2021-04-09 04:00:00	United Kingdom	London	Financial Services	Tiger Global Management, Hedosophia
+1114	Capsule	1	2021-04-28 04:00:00	United States	New York	Healthcare & Life Sciences	Thrive Capital, Durable Capital Partners, G Squared
+1115	MOLOCO	1.5	2021-04-29 04:00:00	United States	Redwood City	Enterprise Tech	Smilegate Investment, DSC Investments, KTB Ventures
+1116	Inari	1.65	2021-05-12 04:00:00	United States	Cambridge	Industrials	Flagship Pioneering, Alexandria Venture Investments, Investment Corporation of Dubai
+1117	Mux	1	2021-04-30 04:00:00	United States	San Francisco	Media & Entertainment	Accel, Cobalt Capital, Andreessen Horowitz
+1118	XForcePlus	1	2021-06-01 04:00:00	China	Shanghai	Enterprise Tech	Eastern Bell Capital, Danhua Capital, MSA Capital
+1119	Augustinus Bader	1	2022-11-09 05:00:00	United Kingdom	London	Consumer & Retail	General Atlantic
+1120	Shift	1	2021-05-06 04:00:00	France	Paris	Insurance	Griffin Gaming Partners, Andreessen Horowitz, Battery Ventures
+1121	Zihaiguo	1	2021-05-06 04:00:00	China	Chongqing	Consumer & Retail	Xingwang Investment Management, China Capital Investment Group, Matrix Partners China
+1122	Forte Labs	1.73	2021-05-12 04:00:00	United States	San Francisco	Media & Entertainment	Iris Capital, Accel, Elaia Partners
+1123	Axtria	1	2021-05-13 04:00:00	United States	Berkeley Heights	Enterprise Tech	Helion Venture Partners, Bain Capital Tech Opportunities, Sequoia Capital India
+1124	Amount	1	2021-05-17 04:00:00	United States	Chicago	Financial Services	Invus Group, Hanaco Venture Capital, WestCap Group
+1125	Vise	1	2021-05-18 04:00:00	United States	New York	Financial Services	Sequoia Capital, Founders Fund, Bling Capital
+1126	Printful	1	2021-05-24 04:00:00	United States	Charlotte	Consumer & Retail	Bregal Sagemount
+1127	Matrixport	1.05	2021-06-01 04:00:00	Singapore	\N	Financial Services	Dragonfly Captial, Qiming Venture Partners, DST Global
+1128	Shippo	1	2021-06-02 04:00:00	United States	San Francisco	Industrials	Version One Ventures, Uncork Capital, Bessemer Venture Partners
+1129	Thirty Madison	1	2021-06-02 04:00:00	United States	New York	Healthcare & Life Sciences	Northzone Ventures, Maveron, Johnson & Johnson Innovation
+1130	LetsGetChecked	1	2021-06-07 04:00:00	Ireland	Dublin	Healthcare & Life Sciences	Optum Ventures, Qiming Venture Partners, Transformation Capital
+1131	EcoFlow	1	2021-06-10 04:00:00	China	Shenzhen	Industrials	Delian Capital, China International Capital Corporation, Sequoia Capital China
+1132	Carro	1	2021-06-14 04:00:00	Singapore	\N	Industrials	SingTel Innov8, Alpha JWC Ventures, Golden Gate Ventures
+1133	Tractable	1	2021-06-16 04:00:00	United Kingdom	London	Insurance	Insight Partners, Ignition Partners, Georgian Partners
+1134	Xiaoe Tech	1	2021-06-15 04:00:00	China	Shenzhen	Enterprise Tech	GGV Capital, Hillhouse Capital Management, IDG Capital
+1135	Bringg	1	2021-06-16 04:00:00	Israel	Tel Aviv	Enterprise Tech	Salesforce Ventures, next47, Pereg Ventures
+1136	Simply	1	2021-06-21 04:00:00	Israel	Tel Aviv	Media & Entertainment	Genesis Partners, Aleph, Insight Partners
+1137	Worldcoin	1	2021-06-29 04:00:00	United States	San Francisco	Financial Services	Day One Ventures, Coinbase Ventures, Andreessen Horowitz
+1138	SmartAsset	1	2021-06-24 04:00:00	United States	New York	Financial Services	Javelin Venture Partners, TTV Capital, Peterson Ventures
+1139	Morning Consult	1	2021-06-08 04:00:00	United States	Washington DC	Enterprise Tech	Advance Venture Partners, Susquehanna Growth Equity, Lupa Systems
+1140	Visier	1	2021-06-29 04:00:00	Canada	Vancouver	Enterprise Tech	Foundation Capital, Summit Partners, Adams Street Partners
+1141	ShipBob	1	2021-06-29 04:00:00	United States	Chicago	Consumer & Retail	Hyde Park Venture Partners, FundersClub. Bain Capital Ventures
+1142	MobileCoin	1.06	2021-07-07 04:00:00	United States	San Francisco	Financial Services	General Catalyst, Future Ventures, AU21
+1143	Amperity	1	2021-07-13 04:00:00	United States	Seattle	Enterprise Tech	Madrona Venture Group, Tiger Global Management, Madera Technology Partners
+1144	Pantheon Systems	1	2021-07-13 04:00:00	United States	San Francisco	Enterprise Tech	Foundry Group, Scale Venture Partners, SoftBank Group
+1145	Xiaoice	1	2021-07-12 04:00:00	China	Beijing	Media & Entertainment	NetEase Capital, Northern Light Venture Capital, Microsoft
+1146	Caidya	1	2021-07-12 04:00:00	China	Shanghai	Healthcare & Life Sciences	Qiming Venture Partners, Vivo Capital, Sequoia Capital China
+1147	Carson Group	1	2021-07-14 04:00:00	United States	Lincoln	Financial Services	Bain Capital
+1148	Bluecore	1	2021-08-05 04:00:00	United States	New York	Consumer & Retail	FirstMark Capital, Georgian Partners, Norwest Venture Partners
+1149	Freshbooks	1	2021-08-10 04:00:00	Canada	Toronto	Enterprise Tech	Accomplice, Oak Investment Partners, Georgian Partners
+1150	Snorkel AI	1	2021-08-09 04:00:00	United States	Palo Alto	Enterprise Tech	Greylock Partners, Google Ventures, BlackRock
+1151	Gelato	1	2021-08-16 04:00:00	Norway	Oslo	Consumer & Retail	Greylock Partners, Google Ventures, BlackRock
+1152	Maven	1.7	2021-08-17 04:00:00	United States	New York	Healthcare & Life Sciences	Female Founders Fund, Oak HC/FT Partners, Sequoia Capital
+1153	PicsArt	1	2021-08-26 04:00:00	United States	San Francisco	Media & Entertainment	Sequoia Capital, DCM Ventures, Insight Partners
+1154	1KMXC	1	2021-08-30 04:00:00	China	Hangzhou	Industrials	Goldman Sachs Asset Management, SDP Investment, Alibaba Group
+1155	Cider	1	2021-09-02 04:00:00	Hong Kong	\N	Consumer & Retail	Andreessen Horowitz, DST Global, IDG Capital
+1156	Berlin Brands Group	1	2021-09-01 04:00:00	Germany	Berlin	Consumer & Retail	Ardian, Bain Capital
+1157	Agile Robots	1	2021-09-09 04:00:00	Germany	Munich	Industrials	Hillhouse Capital Management, Sequoia Capital China, Linear Venture
+1158	Mammoth Biosciences	1	2021-09-09 04:00:00	United States	Brisbane	Healthcare & Life Sciences	NFX, Plum Alley, Mayfield
+1159	Orchard	1	2021-09-09 04:00:00	United States	New York	Financial Services	Accomplice, Juxtapose, FirstMark Capital
+1160	Xendit	1	2021-09-14 04:00:00	Indonesia	Jakarta	Financial Services	Accel, Y Combinator, Amasia
+1161	TrueLayer	1	2021-09-21 04:00:00	United Kingdom	London	Financial Services	Anthemis, Connect Ventures, Northzone Ventures
+1162	Assembly	1	2021-09-21 04:00:00	United States	Culver City	Consumer & Retail	Advent International, PSG, Providence Equity Partners
+1163	PandaDoc	1	2021-09-22 04:00:00	United States	San Francisco	Enterprise Tech	Rembrandt Venture Partners, M12, Altos Ventures
+1164	Keenon Robotics	1	2021-09-15 04:00:00	China	Shanghai	Industrials	Yunqi Partners, SoftBank Group, iVision Ventures
+1165	HAYDON	1	2021-09-24 04:00:00	China	Shanghai	Consumer & Retail	Tencent Holdings, Hillhouse Capital Management
+1166	Ninja Van	1	2021-09-27 04:00:00	Singapore	\N	Consumer & Retail	B Capital Group, Monk's Hill Ventures, Dynamic Parcel Distribution
+1167	Vedantu	1	2021-09-29 04:00:00	India	Bengaluru	Consumer & Retail	Accel, Tiger Global Management, Omidyar Network
+1168	Formation Bio	1	2021-09-30 04:00:00	United States	New York	Healthcare & Life Sciences	Sequoia Capital, Thrive Capital, Sound Ventures
+1169	Ajaib	1	2021-10-04 04:00:00	Indonesia	Jakarta	Financial Services	Softbank Ventures Asia, Alpha JWC Ventures, Insignia Ventures Partners
+1170	Licious	1	2021-10-05 04:00:00	India	Bengaluru	Consumer & Retail	3one4 Capital Partners, Bertelsmann India Investments, Vertex Ventures SE Asia
+1171	Masterworks	1	2021-10-05 04:00:00	United States	New York	Financial Services	Left Lane Capital, Galaxy Interactive, Tru Arrow Partners
+1172	Chronosphere	1	2021-10-07 04:00:00	United States	New York	Enterprise Tech	Greylock Partners, Lux Capital, General Atlantic
+1173	Solo.io	1	2021-10-07 04:00:00	United States	Cambridge	Enterprise Tech	True Ventures, Altimeter Capital, Redpoint Ventures
+1174	Savage X Fenty	1	2021-02-10 05:00:00	United States	El Segundo	Consumer & Retail	Speedinvest, Valar Ventures, Uniqa Ventures
+1175	Swile	1	2021-10-11 04:00:00	France	Montpellier	Enterprise Tech	Index Ventures, IDInvest Partners, Daphni
+1176	MobiKwik	1	2021-10-13 04:00:00	India	Gurugram	Financial Services	Sequoia Capital India, The Times Group, GMO VenturePartners
+1177	Weights & Biases	1.25	2021-10-13 04:00:00	United States	San Francisco	Enterprise Tech	Coatue Management, Insight Partners, Trinity Ventures
+1178	Zopa	1	2021-10-19 04:00:00	United Kingdom	London	Financial Services	IAG Capital Partners, Augmentum Fintech, Northzone Ventures
+1179	Dental Monitoring	1	2021-10-21 04:00:00	France	Paris	Healthcare & Life Sciences	Vitruvian Partners, Merieux Equity Partners, Straumann
+1180	CargoX	1	2021-10-21 04:00:00	Brazil	Sao Paulo	Industrials	Valor Capital Group, Lightrock, Softbank Group
+1181	Fabric	1	2021-10-26 04:00:00	United States	New York	Consumer & Retail	Innovation Endeavors, Aleph, Temasek
+1182	Augury	1	2021-10-26 04:00:00	United States	New York	Industrials	Lerer Hippeau, Munich Re Ventures, Eclipse Ventures
+1183	Moka	1	2021-11-02 04:00:00	China	Beijing	Enterprise Tech	GGV Capital, GSR Ventures, FreesFund
+1184	Tezign	1	2021-11-02 04:00:00	China	Shanghai	Enterprise Tech	Sequoia Capital China, Linear Venture, Hearst Ventures
+1185	Vagaro	1	2021-11-03 04:00:00	United States	Dublin	Consumer & Retail	FTV Capital
+1186	IGAWorks	1	2021-11-08 05:00:00	South Korea	Seoul	Enterprise Tech	Korea Investment Private Equity, Atinum Investment, Korea Investment Partners
+1187	Contrast Security	1	2021-11-09 05:00:00	United States	Los Altos	Enterprise Tech	Acero Capital, General Catalyst, M12
+1188	Wrapbook	1	2021-11-10 05:00:00	United States	New York	Media & Entertainment	Equal Ventures, Uncork Capital, Andreessen Horowitz
+1189	Gaussian Robotics	1.1	2021-11-10 05:00:00	China	Shanghai	Industrials	BlueRun Ventures, Grand Flight Investment, Meituan Dianping
+1190	Mensa Brands	1	2021-11-16 05:00:00	India	Bengaluru	Consumer & Retail	Accel, Falcon Edge Capital, Norwest Venture Partners
+1191	PLACE	1	2021-11-17 05:00:00	United States	Bellingham	Financial Services	Goldman Sachs Asset Management, 3L
+1192	Stytch	1	2021-11-18 05:00:00	United States	San Francisco	Enterprise Tech	Index Ventures, Benchmark, Thrive Capital
+1193	Owkin	1	2021-11-18 05:00:00	United States	New York	Healthcare & Life Sciences	Google Ventures, Cathay Innovation, NJF Capital
+1194	Expel	1	2021-11-18 05:00:00	United States	Herndon	Enterprise Tech	Paladin Capital Group, Greycroft, Scale Venture Partners
+1195	NoBroker	1	2021-11-23 05:00:00	India	Bengaluru	Financial Services	General Atlantic, Elevation Capital, BEENEXT
+1196	Lessen	1	2021-11-30 05:00:00	United States	Scottsdale	Financial Services	Khosla Ventures, General Catalyst, Navitas Capital
+1197	Clara	1	2021-12-06 05:00:00	Mexico	Mexico City	Financial Services	DST Global, General Catalyst, Monashees+
+1198	YipitData	1	2021-12-06 05:00:00	United States	New York	Enterprise Tech	RRE Ventures+, Highland Capital Partners, The Carlyle Group
+1199	Anyscale	1	2021-12-07 05:00:00	United States	Berkeley	Enterprise Tech	Andreessen Horowitz, Intel Capital, Foundation Capital
+1200	Iodine Software	1	2021-12-01 05:00:00	United States	Austin	Healthcare & Life Sciences	Advent International, Bain Capital Ventures, Silversmith Capital Partners
+1201	ReliaQuest	1	2021-12-01 05:00:00	United States	Tampa	Enterprise Tech	KKR, FTV Capital, Ten Eleven Ventures
+1202	Pet Circle	1	2021-12-06 05:00:00	Australia	Alexandria	Consumer & Retail	Prysm Capital, Baillie Gifford & Co., TDM Growth Partners
+1203	Nature's Fynd	1	2021-07-19 04:00:00	United States	Chicago	Consumer & Retail	Danone Manifesto Ventures, 1955 Capital, Breakthrough Energy Ventures
+1204	Lydia	1	2021-12-08 05:00:00	France	Paris	Financial Services	NewAlpha, XAnge Private Equity, Tencent Holdings
+1205	SellerX	1	2021-12-09 05:00:00	Germany	Berlin	Consumer & Retail	Cherry Ventures, Felix Capital, 83North
+1206	SnapLogic	1	2021-12-13 05:00:00	United States	San Mateo	Enterprise Tech	Andreessen Horowitz, Triangle Peak Partners, Ignition Partners
+1207	Cadence	1	2021-12-14 05:00:00	United States	New York	Healthcare & Life Sciences	Thrive Capital, General Catalyst, Coatue Management
+1208	Rothy's	1	2021-12-21 05:00:00	United States	San Francisco	Consumer & Retail	Alpargatas, GS Growth, Lightspeed Venture Partners
+1209	VOI	1	2021-12-21 05:00:00	Sweden	Stockholm	Industrials	Vostok New Ventures, The Raine Group, Balderton Capital
+1210	Haomo.AI	1	2021-12-22 05:00:00	China	Beijing	Industrials	Qualcomm Ventures, Nine Intelligence Capital, Hillhouse Capital Management
+1211	Kopi Kenangan	1	2021-12-27 05:00:00	Indonesia	Jakarta	Consumer & Retail	Horizons Ventures, Sequoia Capital India, Alpha JWC Ventures
+1212	InFarm	1	2021-12-16 05:00:00	Germany	Berlin	Industrials	Atomico, Hanaco Venture Capital, TriplePoint Capital
+1213	ONE	1.35	2021-12-08 05:00:00	Singapore	\N	Media & Entertainment	Temasek, Guggenheim Investments, Qatar Investment Authority
+1214	Fractal Analytics	1	2022-01-05 05:00:00	India	Mumbai	Enterprise Tech	TPG Capital, Apax Partners, TA Associates
+1215	Assent	1	2022-01-06 05:00:00	Canada	Ottawa	Industrials	Vista Equity Partners, Warburg Pincus, First Ascent Ventures
+1216	Pentera	1	2022-01-11 05:00:00	Israel	Petah Tikva	Enterprise Tech	AWZ Ventures, Blackstone, Insight Partners
+1217	Darwinbox	1	2022-01-25 05:00:00	India	Hyderabad	Enterprise Tech	Lightspeed India Partners, Sequoia Capital India, Endiya Partners
+1218	Minio	1	2022-01-26 05:00:00	United States	Palo Alto	Enterprise Tech	General Catalyst, Nexus Venture Partners, Dell Technologies Capital
+1219	Esusu	1	2022-01-27 05:00:00	United States	New York	Financial Services	Next Play Ventures, Zeal Capital Partners, SoftBank Group
+1220	Betterfly	1	2022-02-01 05:00:00	Chile	Santiago	Enterprise Tech	QED Investors, DST Global, Endeavor
+1221	Dune Analytics	1	2022-02-02 05:00:00	Norway	Oslo	Enterprise Tech	Multicoin Capital, Coatue Management, Dragonfly Capital Partners
+1222	Scandit	1	2022-02-09 05:00:00	Switzerland	Zurich	Enterprise Tech	Atomico, NGP Capital, Google Ventures
+1223	Payhawk	1	2022-02-14 05:00:00	United Kingdom	London	Enterprise Tech	Earlybird Venture Capital, Eleven Ventures, QED Investors
+1224	Watershed	1	2022-02-08 05:00:00	United States	San Francisco	Enterprise Tech	Kleiner Perkins Caufield & Byers, Sequoia Capital
+1225	Axelar	1	2022-02-15 05:00:00	Canada	Waterloo	Enterprise Tech	Lemniscap VC, North Island Ventures, Polychain Capital
+1226	CHEQ	1	2022-02-22 05:00:00	United States	New York	Enterprise Tech	Battery Ventures, Tiger Global Management, Hanaco Ventures
+1227	Hasura	1	2022-02-22 05:00:00	India	Bengaluru	Enterprise Tech	Nexus Venture Partners, Vertex Ventures, STRIVE
+1228	Timescale	1	2022-02-22 05:00:00	United States	New York	Enterprise Tech	New Enterprise Associates, Benchmark, Two Sigma Ventures
+1229	Scalapay	1	2022-02-23 05:00:00	Italy	Milan	Financial Services	Fasanara Capital, Tiger Global Management, Baleen Capital
+1230	Omada Health	1	2022-02-23 05:00:00	United States	San Francisco	Healthcare & Life Sciences	U.S. Venture Partners, dRx Capital, Andreessen Horowitz
+1231	BlueVoyant	1	2022-02-23 05:00:00	United States	New York	Enterprise Tech	8VC, Liberty Strategic Capital, Eden Global Partners
+1232	Vendr	1	2022-02-24 05:00:00	United States	Boston	Enterprise Tech	Craft Ventures, F-Prime Capital, Sound Ventures
+1233	Gauntlet Networks	1	2022-03-07 05:00:00	United States	New York	Financial Services	Polychain Capital, Paradigm, Ribbit Capital
+1234	Aptos	1	2022-03-15 04:00:00	United States	Palo Alto	Enterprise Tech	Andreessen Horowitz, Coinbase Ventures, Tiger Global Management
+1235	Glia	1	2022-03-21 04:00:00	United States	New York	Enterprise Tech	Wildcat Capital Management, Insight Partners, Tola Capital
+1236	CommerceIQ	1	2022-03-21 04:00:00	United States	Palo Alto	Consumer & Retail	Trinity Ventures, Madrona Venture Group, Shasta Ventures
+1237	Tarana Wireless	1	2022-03-23 04:00:00	United States	Milpitas	Industrials	Prime Movers Lab, Khosla Ventures, I Squared Capital
+1238	FLASH	1	2022-03-16 04:00:00	United States	Austin	Industrials	L Catterton, Trellis Partners, Vista Equity Partners
+1239	Electric	1	2022-03-29 04:00:00	United States	New York	Enterprise Tech	Primary Venture Partners, Bessemer Venture Partners, Harmonic Growth Partners
+1240	BostonGene	1	2022-04-06 04:00:00	United States	Waltham	Healthcare & Life Sciences	Japan Industrial Partners, Impact Investment Capital, NEC
+1241	Grover	1	2022-04-07 04:00:00	Germany	Berlin	Consumer & Retail	Varengold Bank, Circularity Capital, Coparion
+1242	Genies	1	2022-04-12 04:00:00	United States	Venice	Media & Entertainment	New Enterprise Associates, Tull Investment Group, Silver Lake
+1243	NexHealth	1	2022-04-21 04:00:00	United States	San Francisco	Healthcare & Life Sciences	iSeed Ventures, Point Nine Capital, Buckley Ventures
+1244	UPSIDE Foods	1	2022-04-21 04:00:00	United States	Berkeley	Consumer & Retail	Battery Ventures, Adams Street Partners, Coatue Management
+1245	Factorial	1	2022-10-11 04:00:00	Spain	Barcelona	Enterprise Tech	K Fund, Creandum, CRV
+1246	Divergent 3D	1	2022-04-25 04:00:00	United States	Torrance	Industrials	Hedosophia, Horizons Ventures, Alumni Ventures Group
+1247	Taxfix	1	2022-04-28 04:00:00	Germany	Berlin	Financial Services	Valar Ventures, Index Ventures, Creandum
+1248	Open	1	2022-05-02 04:00:00	India	Bengaluru	Financial Services	3one4 Capital Partners, Tiger Global Management, Temasek
+1249	Opn	1	2022-05-09 04:00:00	Japan	Tokyo	Financial Services	Sinar Mas Digital Ventures, JIC Venture Growth Investments, Golden Gate Ventures
+1250	Remarkable	1	2022-05-10 04:00:00	Norway	Oslo	Consumer & Retail	Spark Capital
+1251	Habi	1	2022-05-11 04:00:00	Colombia	Bogota	Financial Services	Homebrew, Inspired Capital, Tiger Global Management
+1252	CareBridge	1	2022-06-08 04:00:00	United States	Nashville	Healthcare & Life Sciences	Bain Capital Ventures, Splunk Ventures, Cisco Investments
+1253	Immuta	1	2022-06-08 04:00:00	United States	Boston	Enterprise Tech	DFJ Growth Fund, Dell Technologies Capital, Ten Eleven Ventures
+1254	JupiterOne	1	2022-06-02 04:00:00	United States	Morrisville	Enterprise Tech	Bain Capital Ventures, Splunk Ventures, Cisco Investments
+1255	Vayyar	1	2022-06-06 04:00:00	Israel	Yehud	Industrials	Battery Ventures, Bessemer Venture Partners, MoreVC
+1256	LeadSquared	1	2022-06-21 04:00:00	India	Bengaluru	Enterprise Tech	Gaja Capital Partners, Stakeboat Capital, WestBridge Capital
+1257	FourKites	1	2022-06-21 04:00:00	United States	Chicago	Enterprise Tech	Hyde Park Venture Partners, Bain Capital Ventures, Hyde Park Angels
+1258	VulcanForms	1	2022-07-05 04:00:00	United States	Burlington	Industrials	Eclipse Ventures, D1 Capital Partners, Industry Ventures
+1259	SingleStore	1	2022-07-12 04:00:00	United States	San Francisco	Enterprise Tech	Google Ventures, Accel, Data Collective
+1260	Unstoppable Domains	1	2022-07-27 04:00:00	United States	Las Vegas	Media & Entertainment	Boost VC, Draper Associates, Gaingels
+\.
+
+
+--
+-- Name: company_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.company_id_seq', 1260, true);
+
+
+--
+-- Name: _prisma_migrations _prisma_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public._prisma_migrations
+    ADD CONSTRAINT _prisma_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: company company_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.company
+    ADD CONSTRAINT company_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
